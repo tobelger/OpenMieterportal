@@ -36,7 +36,7 @@ Lizenz: **GPL-2.0-or-later**. Es sind keine kostenpflichtigen Erweiterungen erfo
 ## Installation und Einrichtung
 
 1. SupportCandy aus dem WordPress-Pluginverzeichnis installieren und aktivieren.
-2. Plugin-ZIP über **Plugins > Plugin hinzufügen > Plugin hochladen** installieren. Bestehende Installationen behalten ihren technischen Pluginordner `belger-mieterportal` bei.
+2. Plugin-ZIP über **Plugins > Plugin hinzufügen > Plugin hochladen** installieren. Bei einem Update den bestehenden technischen Pluginordner beibehalten.
 3. Geschützten Speicher außerhalb sämtlicher öffentlich erreichbarer Verzeichnisse anlegen. Empfohlen: Verzeichnis `0700`, Eigentümer der PHP-Prozess.
 4. In `wp-config.php`, vor `wp-settings.php`, konfigurieren:
 
@@ -46,7 +46,7 @@ define('BPM_PRIVATE_DIR', '/absoluter/privater/pfad/portal-dokumente');
 define('BPM_PUBLIC_ROOT', '/absoluter/oeffentlicher/hosting-hauptordner');
 ```
 
-5. Auf einer Testkopie aktivieren. Eine neue Portalseite mit `[belger_mieterportal]` wird zunächst privat angelegt.
+5. Auf einer Testkopie aktivieren. Eine neue Portalseite mit `[openmieterportal]` wird zunächst privat angelegt.
 6. Eine eigene Aktivierungsseite mit demselben Shortcode anlegen und ihre ID in `bpm_activation_page_id` hinterlegen, beispielsweise über WP-CLI:
 
 ```sh
@@ -63,7 +63,7 @@ wp option update bpm_supportcandy_enabled production
 
 Die Anwendung entstand aus einer konkreten Immobilienverwaltung. Die aktuelle Einladungsbrief-Vorlage enthält noch deren öffentliche Verwalterkennzeichnung und Logo-Verweis. Andere Verwaltungen müssen die Vorlage vor Einsatz anpassen. Die Veröffentlichung enthält keine Mieterdaten oder Zugangsdaten.
 
-Technische Bezeichner wie `BPM_*`, Tabellenpräfix `bpm_`, Shortcodes und der ursprüngliche Plugin-Dateiname bleiben erhalten, damit bestehende Installationen weiter funktionieren. Der angezeigte Produktname ist OpenMieterportal.
+OpenMieterportal verwendet den Shortcode `[openmieterportal]`. Bestehende Installationen und bereits eingerichtete Seiten bleiben bei einem Update kompatibel; vorhandene Datenbanktabellen werden beibehalten.
 
 ## Betrieb
 

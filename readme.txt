@@ -3,7 +3,7 @@ Contributors: tobelger
 Requires at least: 6.6
 Requires PHP: 8.1
 Requires Plugins: supportcandy
-Stable tag: 0.7.1
+Stable tag: 0.7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,13 +36,13 @@ Die Hauptfunktionen benötigen weder Divi noch Timber, WPForms oder einen extern
 4. In wp-config.php vor wp-settings.php konfigurieren:
    define('BPM_PRIVATE_DIR', '/absoluter/privater/pfad/portal-dokumente');
    Falls der öffentliche Hosting-Hauptordner über dem WordPress-Ordner liegt, zusätzlich BPM_PUBLIC_ROOT auf diesen Hauptordner setzen.
-5. Plugin auf einer Testkopie aktivieren. Die Seite mit [belger_mieterportal] ist bei einer Neuinstallation zunächst privat.
+5. Plugin auf einer Testkopie aktivieren. Die Seite mit [openmieterportal] ist bei einer Neuinstallation zunächst privat.
 6. Eine separate Aktivierungsseite mit demselben Shortcode anlegen; deren ID in der WordPress-Option bpm_activation_page_id hinterlegen. Permalink zum Beispiel /activate/.
 7. Portal und Aktivierungsseite nach der Funktionsprüfung veröffentlichen, ins Menü aufnehmen und von Seiten-/CDN-Caches ausschließen.
 8. SupportCandy für die produktive Integration konfigurieren und die Option bpm_supportcandy_enabled auf production setzen.
 9. Einladungen, eigene/fremde Downloads, Mailzustellung und Wiederherstellung mit Testkonten prüfen.
 
-Technische Bezeichner (Ordner belger-mieterportal, Shortcodes, BPM-Konstanten, Tabellenpräfix bpm_) bleiben aus Kompatibilitätsgründen bestehen.
+Bestehende Installationen bleiben kompatibel. Bereits verwendete technische Bezeichner und Datenbanktabellen werden bei einem Update beibehalten.
 Die derzeitige Briefvorlage enthält noch die ursprüngliche Verwalterkennzeichnung und muss vor Nutzung für andere Verwaltungen angepasst werden.
 
 == Betrieb und Sicherheit ==

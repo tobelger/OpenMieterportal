@@ -1,5 +1,10 @@
 # Änderungen
 
+## 0.7.2
+
+- Produktbezeichnung OpenMieterportal in der Dokumentation vereinheitlicht.
+- Neuer Shortcode `[openmieterportal]`, einschließlich Styles und Schutz-Headern. Bestehende Installationen bleiben kompatibel.
+
 ## 0.7.1
 
 - Kontomenü mit Personensymbol, Profil, Einstellungen und Abmelden.

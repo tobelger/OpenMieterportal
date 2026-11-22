@@ -1,0 +1,12 @@
+.env
+.env.*
+wp-config.php
+*.sql
+*.sqlite
+*.db
+*.log
+*.zip
+/vendor/
+/node_modules/
+/private/
+/output/

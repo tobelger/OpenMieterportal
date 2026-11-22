@@ -61,7 +61,8 @@ final class BPM_Portal {
             if (is_user_logged_in()) { return '<div class="bpm-portal"><section class="bpm-card"><h2>Verwaltungszugang</h2><a class="bpm-button" href="' . esc_url(self::manager() ? admin_url('admin.php?page=belger-mieterportal') : self::url()) . '">Verwaltung öffnen</a></section></div>'; }
             return '<div class="bpm-portal"><section class="bpm-card"><h2>Verwaltungszugang</h2>' . wp_login_form(['echo'=>false,'redirect'=>admin_url('admin.php?page=belger-mieterportal'),'label_username'=>'E-Mail-Adresse oder Benutzername','label_password'=>'Passwort','label_log_in'=>'Anmelden']) . '</section></div>';
         });
-        add_shortcode('belger_mieterportal', [self::class, 'render']);
+        add_shortcode('belger_mieterportal', [self::class, 'render']); // Existing installations.
+        add_shortcode('openmieterportal', [self::class, 'render']);
         // Handle our signed endpoint before legacy child-theme admin redirects.
         add_action('admin_init', static function () {
             if (($GLOBALS['pagenow'] ?? '') === 'admin-post.php' && ($_REQUEST['action'] ?? '') === 'bpm_action') { self::dispatch(); exit; }
@@ -72,7 +73,7 @@ final class BPM_Portal {
         add_action('wp_enqueue_scripts', [self::class, 'assets']);
         add_action('template_redirect', [self::class, 'private_headers']);
         add_action('wp_head', static function () {
-            if (is_singular() && (has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_mieterportal') || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_admin_login'))) {
+            if (is_singular() && ((has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_mieterportal') || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'openmieterportal')) || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_admin_login'))) {
                 // Strip the bearer invitation from the address bar before theme scripts run.
                 echo '<script>(()=>{const p=new URLSearchParams(location.hash.slice(1));const t=p.get("einladung");if(t&&/^(?:[A-HJ-NP-Z2-9]{16}|[a-f0-9]{64})$/i.test(t)){history.replaceState(null,"",location.pathname+location.search);document.addEventListener("DOMContentLoaded",()=>{const f=document.getElementById("bpm-code");if(f){f.value=t;document.getElementById("bpm-activation")?.scrollIntoView({block:"start"});}},{once:true});}})();</script>';
             }
@@ -122,7 +123,7 @@ final class BPM_Portal {
         $admin = get_role('administrator');
         if ($admin) { $admin->add_cap('bpm_manage'); }
         if (!get_option('bpm_page_id')) {
-            $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'private', 'post_title' => 'Mieterportal', 'post_name' => 'mieterportal', 'post_content' => '[belger_mieterportal]', 'comment_status' => 'closed']);
+            $id = wp_insert_post(['post_type' => 'page', 'post_status' => 'private', 'post_title' => 'Mieterportal', 'post_name' => 'mieterportal', 'post_content' => '[openmieterportal]', 'comment_status' => 'closed']);
             if ($id && !is_wp_error($id)) { update_option('bpm_page_id', $id); }
         }
         if (!get_option('bpm_admin_login_page_id')) {
@@ -200,7 +201,7 @@ final class BPM_Portal {
         $wpdb->insert(self::table('events'), ['household_id' => $household, 'actor_id' => get_current_user_id(), 'kind' => $kind, 'object_id' => $object, 'created_at' => self::now()]);
     }
     public static function private_headers(): void {
-        if (is_singular() && (has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_mieterportal') || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_admin_login'))) { self::headers(); }
+        if (is_singular() && ((has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_mieterportal') || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'openmieterportal')) || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_admin_login'))) { self::headers(); }
     }
     public static function headers(): void {
         if (!defined('DONOTCACHEPAGE')) { define('DONOTCACHEPAGE', true); }
@@ -214,7 +215,7 @@ final class BPM_Portal {
         header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-src 'self'; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; object-src 'none'");
     }
     public static function assets(): void {
-        if (is_singular() && (has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_mieterportal') || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_admin_login'))) {
+        if (is_singular() && ((has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_mieterportal') || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'openmieterportal')) || has_shortcode((string) get_post_field('post_content', get_queried_object_id()), 'belger_admin_login'))) {
             wp_enqueue_style('bpm-portal', plugins_url('assets/portal.css', BPM_FILE), [], BPM_VERSION);
             wp_enqueue_script('bpm-portal', plugins_url('assets/portal.js', BPM_FILE), [], BPM_VERSION, true);
         }

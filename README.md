@@ -36,6 +36,10 @@ Lizenz: **GPL-2.0-or-later**. Es sind keine kostenpflichtigen Erweiterungen erfo
 
 ## Installation und Einrichtung
 
+Das Installationspaket wird mit `python3 tools/build-package.py /path/to/OpenMieterportal.zip` gebaut. Es enthält den neutralen Ordner `openmieterportal`, aber keine Tests, CI-Dateien oder Werkzeuge. Der technische PHP-Einstieg bleibt aus Kompatibilitätsgründen erhalten. Bestehende Installationen im alten Ordner dürfen den Ordner bei einem manuellen Update beibehalten; nicht beide Kopien gleichzeitig aktivieren. Für WordPress.org-Updates ist der kanonische Ordner zu verwenden.
+
+Die Oberfläche verwendet deutsche Ausgangstexte mit WordPress-Übersetzungsfunktionen; der POT-Katalog liegt unter `languages/`. Der WordPress-Datenschutzassistent erhält eine technische Formulierungshilfe, ohne eine veröffentlichte Erklärung zu verändern.
+
 1. SupportCandy aus dem WordPress-Pluginverzeichnis installieren und aktivieren.
 2. Plugin-ZIP über **Plugins > Plugin hinzufügen > Plugin hochladen** installieren. Bei einem Update den bestehenden technischen Pluginordner beibehalten.
 3. Geschützten Speicher außerhalb sämtlicher öffentlich erreichbarer Verzeichnisse anlegen. Empfohlen: Verzeichnis `0700`, Eigentümer der PHP-Prozess.

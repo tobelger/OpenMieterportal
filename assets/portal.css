@@ -25,7 +25,22 @@ body.bpm-portal-page .bpm-portal h2,body.bpm-portal-page .bpm-portal h3,body.bpm
 #bpm-document-table th button{display:inline-flex!important;align-items:center;gap:7px;background:none!important;color:var(--bpm-ink)!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;border-radius:0!important;line-height:inherit!important;font:inherit!important;font-weight:700!important;text-align:left;white-space:nowrap}#bpm-document-table th button:hover{background:none!important;color:#87671f!important}.bpm-sort-icons{display:inline-flex;flex-direction:column;font-size:8px;line-height:8px;color:#aaa}th[aria-sort=ascending] .bpm-sort-icons span:first-child,th[aria-sort=descending] .bpm-sort-icons span:last-child{color:#87671f}
 
 /* Keep profile labels on one line; stack values on smaller screens. */
-@media(min-width:901px){#bpm-contact .bpm-data{grid-template-columns:max-content minmax(0,1fr);column-gap:1.5rem}#bpm-contact .bpm-data dt{white-space:nowrap}}
+/* Rent labels can be wider than the default definition-list column. */
+.bpm-data.bpm-rent-data dt,
+#bpm-contact .bpm-data dt {
+    overflow-wrap: anywhere;
+}
+@media (min-width: 701px) {
+    .bpm-data.bpm-rent-data {
+        grid-template-columns: fit-content(55%) minmax(0, 1fr);
+    }
+}
+@media (min-width: 901px) {
+    #bpm-contact .bpm-data {
+        grid-template-columns: fit-content(55%) minmax(0, 1fr);
+        column-gap: 1.5rem;
+    }
+}
 @media(max-width:900px){#bpm-contact .bpm-data{grid-template-columns:minmax(0,1fr)}#bpm-contact .bpm-data dd{margin-bottom:.65rem}}
 
 /* SupportCandy keeps its own editor controls and field sizing. */

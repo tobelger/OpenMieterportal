@@ -1,5 +1,14 @@
 # Änderungen
 
+## 0.8.1
+
+- Lange Bezeichnungen der Mietbestandteile werden ohne Überlappung dargestellt.
+
+## 0.8.0
+
+- Betriebskosten- und Heizkostenvorauszahlung getrennt ausweisen, ergänzt um optionale Garagenmiete.
+- Verwaltung und Vertragsübersicht um die Mietbestandteile und ihre Gültigkeit erweitern.
+
 ## 0.7.4
 
 - SupportCandy-Empfänger werden vor der nativen Empfängerprüfung gefiltert. Unterdrückte Test- und Sammelbenachrichtigungen erzeugen keine empfängerlosen SMTP-Aufträge.

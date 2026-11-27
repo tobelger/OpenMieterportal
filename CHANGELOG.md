@@ -1,5 +1,15 @@
 # Änderungen
 
+## 0.9.0
+
+- Optionaler separater Schlüsselring für AES-256-GCM; eigene sensible Tabellenfelder, Kontoprofile und Portaldateien werden kontextgebunden verschlüsselt.
+- Explizite CLI-Migration und Schlüsselrotation; unveränderte IDs und Dokumentprüfsummen.
+- Atomare Versuchslimits für Anmeldung, Aktivierung, Schreibzugriffe und Downloads; begrenzte Sitzungen.
+- Bankänderungen verlangen das aktuelle Passwort und lösen sofort einen allgemeinen Sicherheitshinweis aus.
+- Optionale Zwei-Faktor-Pflicht für Verwaltungszugänge über das unveränderte offizielle Two-Factor-Plugin.
+- Verwaltungsdaten, Briefkopf und Vereinbarung sind konfigurierbar; keine Theme-/Widget-Änderungen mehr bei Aktivierung.
+- Sicherheitsstatus und dokumentierte Grenzen für WordPress-/SupportCandy-Daten.
+
 ## 0.8.1
 
 - Lange Bezeichnungen der Mietbestandteile werden ohne Überlappung dargestellt.

@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 $current_rent = BPM_Portal::current_rent((int) $h->id);
-$rent_history = $wpdb->get_results($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('rent_terms') . ' WHERE household_id=%d ORDER BY effective_from DESC LIMIT 100', $h->id));
+$rent_history = BPM_Data::rows($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('rent_terms') . ' WHERE household_id=%d ORDER BY effective_from DESC LIMIT 100', $h->id));
 ?>
 <section class="bpm-card">
     <h2>Vertragliche Mietbeträge</h2>

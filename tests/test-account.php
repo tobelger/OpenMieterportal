@@ -1,7 +1,5 @@
 <?php
-$test_wp_load=getenv('BPM_TEST_WP_LOAD');
-if(!$test_wp_load||!is_file($test_wp_load))throw new RuntimeException('Set BPM_TEST_WP_LOAD to a disposable local WordPress wp-load.php');
-require $test_wp_load;
+require getenv('BPM_TEST_WP_LOAD') ?: '/tmp/belger-portal-runtime/wordpress/wp-load.php';
 if(!str_starts_with(home_url(),'http://127.0.0.1:'))throw new RuntimeException('Local fixture required');
 global $wpdb;$checks=0;$mails=[];$mail_ok=true;
 add_filter('pre_wp_mail',static function($pre,$args)use(&$mails,&$mail_ok){$mails[]=$args;return $mail_ok;},PHP_INT_MAX,2);
@@ -12,7 +10,7 @@ try{
  foreach(['a','b']as $party){$uid=wp_insert_user(['user_login'=>'account-'.$tag.$party,'user_email'=>'account-'.$tag.$party.'@example.test','user_pass'=>'Local fixture test password 2026!','role'=>'bpm_tenant']);if(is_wp_error($uid))throw new Exception('User failed');$uids[]=$uid;
  BPM_Portal::insert('households',['reference'=>'TEST-ACCOUNT-'.$tag.$party,'label'=>'Test '.$party,'unit_label'=>'Musterstraße 1, 12345 Teststadt','user_id'=>$uid,'status'=>'active','created_at'=>BPM_Portal::now()]);$hids[]=(int)$wpdb->insert_id;}
  $h=$wpdb->get_row($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('households').' WHERE id=%d',$hids[0]));$other=$wpdb->get_row($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('households').' WHERE id=%d',$hids[1]));wp_set_current_user($uids[0]);
- $profile=['address'=>"Musterstraße 2\n12345 Teststadt",'phone'=>'+49 30 123456','holder'=>'Test Mietpartei','iban'=>'DE89 3704 0044 0532 0130 00','bic'=>'COBADEFFXXX'];
+ $profile=['address'=>"Musterstraße 2\n12345 Teststadt",'phone'=>'+49 30 123456','holder'=>'Test Mietpartei','iban'=>'DE89 3704 0044 0532 0130 00','bic'=>'COBADEFFXXX','current_password'=>'Local fixture test password 2026!'];
  account_reject(fn()=>BPM_Account::save_profile($other,$profile));
  account_reject(fn()=>BPM_Account::save_profile($h,array_merge($profile,['iban'=>''])));
  account_reject(fn()=>BPM_Account::save_profile($h,array_merge($profile,['iban'=>'DE88370400440532013000'])));
@@ -42,6 +40,6 @@ try{
  account_check(str_contains($html,'bpm-user-menu'),'Account menu rendered');
  account_check(str_contains($html,'id="bpm-account-iban" name="iban" maxlength="50" required'),'Required bank field');
  account_check(!str_contains($html,'Kontakt-E-Mail</dt>'),'Email removed from contract overview');
- // Rendered test content is not written into the repository.
+ file_put_contents('/tmp/bpm-account-fixture.html',$html);
  echo "$checks account security and notification checks passed\n";
 }finally{foreach($hids as $hid){foreach(['households','notification_queue','events']as $table)$wpdb->delete(BPM_Portal::table($table),[$table==='households'?'id':'household_id'=>$hid]);}require_once ABSPATH.'wp-admin/includes/user.php';foreach($uids as $uid)wp_delete_user($uid);}

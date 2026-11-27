@@ -31,8 +31,8 @@ final class BPM_Units_Admin {
         if ($wpdb->get_var($wpdb->prepare('SELECT id FROM '.BPM_Portal::table('units').' WHERE reference=%s AND id<>%d', $reference, $id))) { throw new InvalidArgumentException('Diese Wohnungsnummer ist bereits vergeben.'); }
         $wpdb->query('START TRANSACTION');
         try {
-            if ($wpdb->update(BPM_Portal::table('units'), ['label'=>$label,'reference'=>$reference], ['id'=>$id]) === false ||
-                $wpdb->update(BPM_Portal::table('households'), ['unit_label'=>$u->address . ' · ' . $label], ['unit_id'=>$id]) === false) { throw new RuntimeException('Die Wohnung konnte nicht gespeichert werden.'); }
+            if (BPM_Data::update(BPM_Portal::table('units'), ['label'=>$label,'reference'=>$reference], ['id'=>$id]) === false ||
+                BPM_Data::update(BPM_Portal::table('households'), ['unit_label'=>$u->address . ' · ' . $label], ['unit_id'=>$id]) === false) { throw new RuntimeException('Die Wohnung konnte nicht gespeichert werden.'); }
             BPM_Portal::event('unit_updated', 0, $id);
             if ($wpdb->last_error) { throw new RuntimeException('Die Wohnung konnte nicht gespeichert werden.'); }
             $wpdb->query('COMMIT');
@@ -59,17 +59,17 @@ final class BPM_Units_Admin {
         if (isset($_GET['bpm_migration_report'])) { $report=get_option('bpm_meter_points_migration_report'); if($report) { echo '<div class="notice notice-success"><p>Übernahme geprüft: '.(int)$report['devices'].' Geräte und '.(int)$report['readings'].' Ablesungen einschließlich Testdaten unverändert erhalten.</p></div>'; } }
         if ($id) {
             try { $u=BPM_Portal::unit($id); } catch (InvalidArgumentException $e) { wp_die(esc_html($e->getMessage()), '', ['response'=>404]); }
-            $meters=$wpdb->get_results($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('meters').' WHERE unit_id=%d ORDER BY label,number',$id));
+            $meters=BPM_Data::rows($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('meters').' WHERE unit_id=%d ORDER BY label,number',$id));
             ?><p><a href="<?= esc_url(self::url()) ?>">← Alle Wohnungen</a> · <a href="<?= esc_url(add_query_arg(['page'=>'belger-mieterportal','bpm_unit'=>$id],admin_url('admin.php'))) ?>">Mietverhältnisse dieser Wohnung anzeigen</a></p>
             <section class="bpm-card"><h2>Wohnung bearbeiten</h2><p><strong><?= esc_html($u->building_label) ?></strong><br><?= esc_html($u->address) ?></p>
             <form method="post" action="<?= esc_url(admin_url('admin-post.php')) ?>"><?php BPM_Portal::form('unit_update'); ?><input type="hidden" name="unit_id" value="<?= $id ?>"><label>Wohnungsnummer<input name="unit_reference" maxlength="100" required value="<?= esc_attr($u->reference) ?>"></label><label>Wohnungsbezeichnung<input name="unit_name" maxlength="190" required value="<?= esc_attr($u->label) ?>"></label><button type="submit">Wohnung speichern</button></form></section>
             <?php require __DIR__ . '/view-meter-points-admin.php'; ?>
-            <?php $unassigned=$wpdb->get_results('SELECT m.* FROM '.BPM_Portal::table('meters').' m WHERE (m.unit_id IS NULL OR m.unit_id=0) AND m.household_id=0 AND NOT EXISTS (SELECT 1 FROM '.BPM_Portal::table('readings').' r WHERE r.meter_id=m.id) ORDER BY m.label,m.number'); if($unassigned): ?>
+            <?php $unassigned=BPM_Data::rows('SELECT m.* FROM '.BPM_Portal::table('meters').' m WHERE (m.unit_id IS NULL OR m.unit_id=0) AND m.household_id=0 AND NOT EXISTS (SELECT 1 FROM '.BPM_Portal::table('readings').' r WHERE r.meter_id=m.id) ORDER BY m.label,m.number'); if($unassigned): ?>
             <section class="bpm-card"><h2>Vorhandenen freien Zähler zuordnen</h2><form method="post" action="<?= esc_url(admin_url('admin-post.php')) ?>"><?php BPM_Portal::form('unit_meter_assign'); ?><input type="hidden" name="unit_id" value="<?= $id ?>"><label>Zähler<select name="meter_id" required><?php foreach($unassigned as $m): ?><option value="<?= (int)$m->id ?>"><?= esc_html($m->label.' · '.$m->number) ?></option><?php endforeach; ?></select></label><button type="submit">Zähler zuordnen</button></form></section><?php endif;
         } else {
-            $bid=absint($_GET['building_id'] ?? 0);$buildings=$wpdb->get_results('SELECT * FROM '.BPM_Portal::table('buildings').' ORDER BY address');
+            $bid=absint($_GET['building_id'] ?? 0);$buildings=BPM_Data::rows('SELECT * FROM '.BPM_Portal::table('buildings').' ORDER BY address');
             ?><form method="get" action="<?= esc_url(admin_url('admin.php')) ?>"><input type="hidden" name="page" value="bpm-units"><label>Gebäude<select name="building_id"><option value="0">Alle Gebäude</option><?php foreach($buildings as $b): ?><option value="<?= (int)$b->id ?>" <?= selected($bid,$b->id,false) ?>><?= esc_html($b->label) ?></option><?php endforeach; ?></select></label><button>Wohnungen anzeigen</button></form>
-            <?php $sql='SELECT u.*,b.label AS building_label,b.address,(SELECT COUNT(*) FROM '.BPM_Portal::table('meter_points').' p WHERE p.unit_id=u.id) AS point_count,(SELECT COUNT(*) FROM '.BPM_Portal::table('meters').' m WHERE m.unit_id=u.id) AS meter_count FROM '.BPM_Portal::table('units').' u JOIN '.BPM_Portal::table('buildings').' b ON b.id=u.building_id';if($bid)$sql.=$wpdb->prepare(' WHERE b.id=%d',$bid);$units=$wpdb->get_results($sql.' ORDER BY b.address,u.label,u.id'); ?>
+            <?php $sql='SELECT u.*,b.label AS building_label,b.address,(SELECT COUNT(*) FROM '.BPM_Portal::table('meter_points').' p WHERE p.unit_id=u.id) AS point_count,(SELECT COUNT(*) FROM '.BPM_Portal::table('meters').' m WHERE m.unit_id=u.id) AS meter_count FROM '.BPM_Portal::table('units').' u JOIN '.BPM_Portal::table('buildings').' b ON b.id=u.building_id';if($bid)$sql.=$wpdb->prepare(' WHERE b.id=%d',$bid);$units=BPM_Data::rows($sql.' ORDER BY b.address,u.label,u.id'); ?>
             <div class="bpm-table-scroll"><table><thead><tr><th>Gebäude</th><th>Wohnung</th><th>Wohnungsnummer</th><th>Messstellen</th><th>Geräte</th></tr></thead><tbody><?php foreach($units as $u): ?><tr><td><?= esc_html($u->building_label) ?></td><td><a href="<?= esc_url(self::url((int)$u->id)) ?>"><?= esc_html($u->label) ?> – bearbeiten</a></td><td><?= esc_html($u->reference) ?></td><td><?= (int)$u->point_count ?></td><td><?= (int)$u->meter_count ?></td></tr><?php endforeach; ?></tbody></table></div><?php
         }
         echo '</div>';

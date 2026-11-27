@@ -13,11 +13,11 @@ final class BPM_Portal {
     public static function is_activation(): bool { return (int) get_queried_object_id() === (int) get_option('bpm_activation_page_id') && (int) get_option('bpm_activation_page_id') > 0; }
     public static function current_rent(int $hid): ?object {
         global $wpdb;
-        return $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table('rent_terms') . ' WHERE household_id=%d AND effective_from<=%s ORDER BY effective_from DESC LIMIT 1', $hid, self::today())) ?: null;
+        return BPM_Data::row($wpdb->prepare('SELECT * FROM ' . self::table('rent_terms') . ' WHERE household_id=%d AND effective_from<=%s ORDER BY effective_from DESC LIMIT 1', $hid, self::today())) ?: null;
     }
     public static function next_rent(int $hid): ?object {
         global $wpdb;
-        return $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table('rent_terms') . ' WHERE household_id=%d AND effective_from>%s ORDER BY effective_from ASC LIMIT 1', $hid, self::today())) ?: null;
+        return BPM_Data::row($wpdb->prepare('SELECT * FROM ' . self::table('rent_terms') . ' WHERE household_id=%d AND effective_from>%s ORDER BY effective_from ASC LIMIT 1', $hid, self::today())) ?: null;
     }
     public static function euros(int $cents): string { return number_format($cents / 100, 2, ',', '.') . ' €'; }
     public static function today(): string { return (new DateTimeImmutable('now', new DateTimeZone('Europe/Berlin')))->format('Y-m-d'); }
@@ -30,13 +30,13 @@ final class BPM_Portal {
     public static function expire_household(object $h): void {
         global $wpdb;
         if (!self::past_deadline($h) || !in_array($h->status, ['active', 'pending_email', 'invited'], true)) { return; }
-        $changed = $wpdb->update(self::table('households'), ['status' => 'expired'], ['id' => $h->id, 'status' => $h->status]);
+        $changed = BPM_Data::update(self::table('households'), ['status' => 'expired'], ['id' => $h->id, 'status' => $h->status]);
         if ($h->user_id) { WP_Session_Tokens::get_instance((int) $h->user_id)->destroy_all(); }
         if ($changed === 1) { self::event('access_expired', (int) $h->id); }
     }
     public static function expire_access(): void {
         global $wpdb;
-        $rows = $wpdb->get_results('SELECT * FROM ' . self::table('households') . " WHERE tenancy_end IS NOT NULL AND status IN ('active','pending_email','invited')");
+        $rows = BPM_Data::rows('SELECT * FROM ' . self::table('households') . " WHERE tenancy_end IS NOT NULL AND status IN ('active','pending_email','invited')");
         foreach ($rows as $h) { self::expire_household($h); }
     }
     public static function deactivate(): void { wp_clear_scheduled_hook('bpm_expire_access'); wp_clear_scheduled_hook('bpm_account_digest'); }
@@ -51,12 +51,6 @@ final class BPM_Portal {
         add_action('template_redirect', static function () {
             if ((int) get_option('bpm_legacy_login_page') > 0 && is_page((int) get_option('bpm_legacy_login_page')) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') { wp_safe_redirect(self::url(), 301); exit; }
         }, 1);
-        add_filter('wp_nav_menu_items', static function ($items, $args) {
-            if (($args->theme_location ?? '') === 'secondary-menu') {
-                $items = preg_replace('~<li\b[^>]*>\s*<a\b[^>]*href=["\'][^"\']*/(?:login|admin-login)/?["\'][^>]*>.*?</a>\s*</li>~is', '', $items);
-            }
-            return $items;
-        }, 100, 2);
         add_shortcode('belger_admin_login', static function () {
             if (is_user_logged_in()) { return '<div class="bpm-portal"><section class="bpm-card"><h2>Verwaltungszugang</h2><a class="bpm-button" href="' . esc_url(self::manager() ? admin_url('admin.php?page=belger-mieterportal') : self::url()) . '">Verwaltung öffnen</a></section></div>'; }
             return '<div class="bpm-portal"><section class="bpm-card"><h2>Verwaltungszugang</h2>' . wp_login_form(['echo'=>false,'redirect'=>admin_url('admin.php?page=belger-mieterportal'),'label_username'=>'E-Mail-Adresse oder Benutzername','label_password'=>'Passwort','label_log_in'=>'Anmelden']) . '</section></div>';
@@ -119,6 +113,7 @@ final class BPM_Portal {
             'events' => "id bigint unsigned NOT NULL AUTO_INCREMENT,\nhousehold_id bigint unsigned NOT NULL DEFAULT 0,\nactor_id bigint unsigned NOT NULL DEFAULT 0,\nkind varchar(60) NOT NULL,\nobject_id bigint unsigned NOT NULL DEFAULT 0,\ncreated_at datetime NOT NULL,\nPRIMARY KEY  (id),\nKEY kind (kind)"
         ];
         foreach ($definitions as $name => $definition) { dbDelta('CREATE TABLE ' . self::table($name) . " (\n$definition\n) $cc;"); }
+        BPM_Data::install();
         add_role('bpm_tenant', 'Mietpartei', ['read' => true]);
         $admin = get_role('administrator');
         if ($admin) { $admin->add_cap('bpm_manage'); }
@@ -128,16 +123,7 @@ final class BPM_Portal {
         }
         if (!get_option('bpm_admin_login_page_id')) {
             $admin_page = wp_insert_post(['post_type'=>'page','post_status'=>'publish','post_title'=>'Verwaltungszugang','post_name'=>'admin-login','post_content'=>'[belger_admin_login]','comment_status'=>'closed']);
-            if ($admin_page && !is_wp_error($admin_page)) { update_option('bpm_admin_login_page_id',$admin_page); update_post_meta($admin_page,'_et_pb_page_layout','et_full_width_page'); }
-            $widgets = get_option('widget_text', []);
-            foreach ($widgets as $key => $widget) {
-                if (is_array($widget) && str_contains($widget['text'] ?? '', home_url('/login/'))) {
-                    $text = str_replace(home_url('/login/'), self::url(), $widget['text']);
-                    $text = preg_replace('/>\s*Login\s*</', '>Mieterportal<', $text);
-                    $widgets[$key]['text'] = $text . '<p><a href="' . esc_url(home_url('/admin-login/')) . '">Verwaltungszugang</a></p>';
-                }
-            }
-            update_option('widget_text',$widgets);
+            if ($admin_page && !is_wp_error($admin_page)) { update_option('bpm_admin_login_page_id',$admin_page);  }
         }
         if (!wp_next_scheduled('bpm_expire_access')) { wp_schedule_event(time() + 60, 'hourly', 'bpm_expire_access'); }
         self::migrate_units();
@@ -149,7 +135,7 @@ final class BPM_Portal {
     /** Preserve contract IDs, accounts, documents and consent during the additive migration. */
     public static function migrate_units(): void {
         global $wpdb;
-        $rows = $wpdb->get_results('SELECT * FROM ' . self::table('households') . ' WHERE unit_id IS NULL');
+        $rows = BPM_Data::rows('SELECT * FROM ' . self::table('households') . ' WHERE unit_id IS NULL');
         foreach ($rows as $h) {
             // Only split an explicitly structured legacy address; unknown records require manual assignment.
             $parts = explode(' · ', $h->unit_label, 2);
@@ -166,24 +152,24 @@ final class BPM_Portal {
                 self::insert('units', ['building_id'=>$bid, 'reference'=>$uref, 'label'=>$parts[1]]);
                 $uid = $wpdb->insert_id;
             }
-            if ($wpdb->update(self::table('households'), ['unit_id'=>$uid], ['id'=>$h->id]) === false) { throw new RuntimeException('Wohnungsübernahme fehlgeschlagen.'); }
-            if ($wpdb->update(self::table('meters'), ['unit_id'=>$uid], ['household_id'=>$h->id, 'unit_id'=>null]) === false) { throw new RuntimeException('Zählerübernahme fehlgeschlagen.'); }
+            if (BPM_Data::update(self::table('households'), ['unit_id'=>$uid], ['id'=>$h->id]) === false) { throw new RuntimeException('Wohnungsübernahme fehlgeschlagen.'); }
+            if (BPM_Data::update(self::table('meters'), ['unit_id'=>$uid], ['household_id'=>$h->id, 'unit_id'=>null]) === false) { throw new RuntimeException('Zählerübernahme fehlgeschlagen.'); }
         }
     }
     public static function unit(int $id): object {
         global $wpdb;
-        $u = $wpdb->get_row($wpdb->prepare('SELECT u.*, b.address, b.label AS building_label FROM ' . self::table('units') . ' u JOIN ' . self::table('buildings') . ' b ON b.id=u.building_id WHERE u.id=%d', $id));
+        $u = BPM_Data::row($wpdb->prepare('SELECT u.*, b.address, b.label AS building_label FROM ' . self::table('units') . ' u JOIN ' . self::table('buildings') . ' b ON b.id=u.building_id WHERE u.id=%d', $id));
         if (!$u) { throw new InvalidArgumentException('Bitte eine vorhandene Wohnung auswählen.'); }
         return $u;
     }
     public static function meters_for(object $h): array {
         global $wpdb;
         if (empty($h->unit_id) || empty($h->tenancy_start) || $h->tenancy_start > self::today() || (!empty($h->tenancy_end) && $h->tenancy_end < self::today())) { return []; }
-        return $wpdb->get_results($wpdb->prepare('SELECT m.* FROM ' . self::table('meters') . ' m WHERE m.unit_id=%d AND m.active=1 AND (m.installed_on IS NULL OR m.installed_on<=%s) AND (m.removed_on IS NULL OR m.removed_on>=%s) AND NOT EXISTS (SELECT 1 FROM '.self::table('meters').' n WHERE m.point_id IS NOT NULL AND n.point_id=m.point_id AND n.active=1 AND (n.installed_on IS NULL OR n.installed_on<=%s) AND (n.removed_on IS NULL OR n.removed_on>=%s) AND (COALESCE(n.installed_on,\'0000-01-01\')>COALESCE(m.installed_on,\'0000-01-01\') OR (COALESCE(n.installed_on,\'0000-01-01\')=COALESCE(m.installed_on,\'0000-01-01\') AND n.id>m.id))) ORDER BY m.label,m.number', $h->unit_id, self::today(), self::today(), self::today(), self::today()));
+        return BPM_Data::rows($wpdb->prepare('SELECT m.* FROM ' . self::table('meters') . ' m WHERE m.unit_id=%d AND m.active=1 AND (m.installed_on IS NULL OR m.installed_on<=%s) AND (m.removed_on IS NULL OR m.removed_on>=%s) AND NOT EXISTS (SELECT 1 FROM '.self::table('meters').' n WHERE m.point_id IS NOT NULL AND n.point_id=m.point_id AND n.active=1 AND (n.installed_on IS NULL OR n.installed_on<=%s) AND (n.removed_on IS NULL OR n.removed_on>=%s) AND (COALESCE(n.installed_on,\'0000-01-01\')>COALESCE(m.installed_on,\'0000-01-01\') OR (COALESCE(n.installed_on,\'0000-01-01\')=COALESCE(m.installed_on,\'0000-01-01\') AND n.id>m.id))) ORDER BY m.label,m.number', $h->unit_id, self::today(), self::today(), self::today(), self::today()));
     }
     public static function meter_for_reading(int $id, object $h, string $date, bool $manager = false): object {
         global $wpdb;
-        $m = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table('meters') . ' WHERE id=%d', $id));
+        $m = BPM_Data::row($wpdb->prepare('SELECT * FROM ' . self::table('meters') . ' WHERE id=%d', $id));
         if (!$m || empty($h->unit_id) || (int)$m->unit_id !== (int)$h->unit_id || (!$manager && !$m->active) || empty($h->tenancy_start) || $date < $h->tenancy_start || (!empty($h->tenancy_end) && $date > $h->tenancy_end) || (!empty($m->installed_on) && $date < $m->installed_on) || (!empty($m->removed_on) && $date > $m->removed_on)) {
             throw new InvalidArgumentException('Dieser Zähler ist für Ihre Wohnung und diesen Mietzeitraum nicht verfügbar.');
         }
@@ -194,7 +180,7 @@ final class BPM_Portal {
         global $wpdb;
         $user_id = $user_id ?? get_current_user_id();
         if (!$user_id) { return null; }
-        return $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table('households') . ' WHERE user_id=%d', $user_id)) ?: null;
+        return BPM_Data::row($wpdb->prepare('SELECT * FROM ' . self::table('households') . ' WHERE user_id=%d', $user_id)) ?: null;
     }
     public static function event(string $kind, int $household = 0, int $object = 0): void {
         global $wpdb;
@@ -225,7 +211,7 @@ final class BPM_Portal {
         $household = self::household($user->ID);
         if ($household && self::past_deadline($household)) { self::expire_household($household); return; }
         if ($household && $household->status === 'pending_email' && in_array('bpm_tenant', $user->roles, true)) {
-            $wpdb->update(self::table('households'), ['status' => 'active', 'activated_at' => self::now()], ['id' => $household->id, 'status' => 'pending_email']);
+            BPM_Data::update(self::table('households'), ['status' => 'active', 'activated_at' => self::now()], ['id' => $household->id, 'status' => 'pending_email']);
             self::event('account_verified', (int) $household->id);
         }
     }
@@ -249,7 +235,7 @@ final class BPM_Portal {
     public static function notify(int $household_id, bool $to_tenant): void {
         if ($to_tenant) { BPM_Account::notify($household_id); return; }
         global $wpdb;
-        $household = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table('households') . ' WHERE id=%d', $household_id));
+        $household = BPM_Data::row($wpdb->prepare('SELECT * FROM ' . self::table('households') . ' WHERE id=%d', $household_id));
         $user = $household && $household->user_id ? get_userdata((int) $household->user_id) : null;
         $email = $to_tenant ? ($user->user_email ?? '') : get_option('admin_email');
         if ($email && !self::mail($email, 'Neue Information im Mieterportal', "Im Mieterportal liegt eine neue Information bereit. Bitte melden Sie sich an:\n" . self::url() . "\n\nDiese E-Mail enthält aus Datenschutzgründen keine Nachrichtentexte oder Dokumente.")) {
@@ -279,11 +265,12 @@ final class BPM_Portal {
                 }
                 self::claim_invite(); exit;
             }
-            if (in_array($operation, ['building', 'unit', 'unit_update', 'unit_meter_save', 'unit_meter_assign', 'point_save', 'device_save', 'device_exchange', 'household', 'tenancy', 'rent', 'invite', 'resend', 'document', 'meter', 'admin_reply', 'settings', 'review_reading', 'admin_reading', 'access'], true)) {
+            if (in_array($operation, ['branding', 'building', 'unit', 'unit_update', 'unit_meter_save', 'unit_meter_assign', 'point_save', 'device_save', 'device_exchange', 'household', 'tenancy', 'rent', 'invite', 'resend', 'document', 'meter', 'admin_reply', 'settings', 'review_reading', 'admin_reading', 'access'], true)) {
                 if (!self::manager()) { throw new RuntimeException('Keine Berechtigung.'); }
                 BPM_Admin::action($operation); exit;
             }
             $h = self::household();
+            BPM_Security::limit('portal-write',get_current_user_id().'|'.BPM_Security::ip(),60,300);
             if (!self::can_access($h)) { throw new RuntimeException('Bitte melden Sie sich mit einem aktivierten Mieterzugang an.'); }
             if (BPM_Account::action($operation, $h)) { return; }
             $hid = (int) $h->id;
@@ -301,7 +288,7 @@ final class BPM_Portal {
             } elseif ($operation === 'reply') {
                 $thread = self::owned('threads', absint($_POST['thread_id'] ?? 0), $hid);
                 self::insert('messages', ['thread_id' => $thread->id, 'user_id' => get_current_user_id(), 'body' => self::text('body'), 'created_at' => self::now()]);
-                $wpdb->update(self::table('threads'), ['status' => 'offen', 'updated_at' => self::now()], ['id' => $thread->id]);
+                BPM_Data::update(self::table('threads'), ['status' => 'offen', 'updated_at' => self::now()], ['id' => $thread->id]);
                 self::event('message_created', $hid, (int) $thread->id);
                 self::notify($hid, false);
             } elseif ($operation === 'reading') {
@@ -310,7 +297,7 @@ final class BPM_Portal {
                 if (!(int) $meter->active) { throw new InvalidArgumentException('Dieser Zähler ist nicht mehr aktiv.'); }
                 $value = BPM_Domain::reading((string) ($_POST['value'] ?? ''));
                 $date = BPM_Domain::date((string) ($_POST['read_at'] ?? ''));
-                $exists = $wpdb->get_var($wpdb->prepare('SELECT id FROM ' . self::table('readings') . ' WHERE meter_id=%d AND read_at=%s AND value=%s', $meter->id, $date, $value));
+                $exists = $wpdb->get_var($wpdb->prepare('SELECT id FROM ' . self::table('readings') . ' WHERE meter_id=%d AND read_at=%s', $meter->id, $date));
                 if ($exists) { throw new InvalidArgumentException('Dieser Wert wurde für das angegebene Datum bereits gemeldet.'); }
                 $photo = '';
                 if (!empty($_FILES['photo']['name'])) { $photo = BPM_Storage::upload($_FILES['photo'], false)['storage_key']; }
@@ -325,7 +312,7 @@ final class BPM_Portal {
                 if ($choice === 'portal' && (!get_option('bpm_consent_enabled') || empty($_POST['authority']) || empty($_POST['agree']))) {
                     throw new InvalidArgumentException('Die Vereinbarung ist noch nicht freigegeben oder die erforderlichen Bestätigungen fehlen.');
                 }
-                self::insert('preferences', ['household_id' => $hid, 'user_id' => get_current_user_id(), 'choice' => $choice, 'version' => BPM_Domain::CONSENT_VERSION, 'wording' => BPM_Domain::CONSENT_TEXT, 'authority_confirmed' => $choice === 'portal' ? 1 : 0, 'created_at' => self::now()]);
+                self::insert('preferences', ['household_id' => $hid, 'user_id' => get_current_user_id(), 'choice' => $choice, 'version' => BPM_Settings::consent_version(), 'wording' => BPM_Settings::consent_text(), 'authority_confirmed' => $choice === 'portal' ? 1 : 0, 'created_at' => self::now()]);
                 self::event('communication_' . $choice, $hid);
                 self::notify($hid, false);
             } else { throw new InvalidArgumentException('Unbekannte Aktion.'); }
@@ -338,12 +325,12 @@ final class BPM_Portal {
     }
     public static function insert(string $table, array $data): void {
         global $wpdb;
-        if ($wpdb->insert(self::table($table), $data) === false) { throw new RuntimeException('Die Angaben konnten nicht gespeichert werden. Bitte kontaktieren Sie die Verwaltung.'); }
+        if (BPM_Data::insert(self::table($table), $data) === false) { throw new RuntimeException('Die Angaben konnten nicht gespeichert werden. Bitte kontaktieren Sie die Verwaltung.'); }
     }
     public static function owned(string $table, int $id, int $hid, bool $manager = false): object {
         global $wpdb;
         if (!in_array($table, ['threads', 'meters', 'documents', 'readings'], true)) { throw new RuntimeException('Ungültiger Datentyp.'); }
-        $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table($table) . ' WHERE id=%d', $id));
+        $row = BPM_Data::row($wpdb->prepare('SELECT * FROM ' . self::table($table) . ' WHERE id=%d', $id));
         if (!$row || !BPM_Domain::allowed((int) $row->household_id, $hid, $manager)) { throw new RuntimeException('Dieser Eintrag ist nicht verfügbar.'); }
         return $row;
     }
@@ -351,13 +338,14 @@ final class BPM_Portal {
         global $wpdb;
         $token = BPM_Domain::normalize_invitation((string) ($_POST['invite_code'] ?? ''));
         $email = sanitize_email(wp_unslash((string) ($_POST['email'] ?? '')));
+        BPM_Security::limit('activation',BPM_Security::ip(),8,15*MINUTE_IN_SECONDS);
         $rate = 'bpm_reg_' . hash_hmac('sha256', (string) ($_SERVER['REMOTE_ADDR'] ?? ''), wp_salt('nonce'));
         $count = (int) get_transient($rate);
         if ($count >= 8) { throw new RuntimeException('Zu viele Versuche. Bitte versuchen Sie es in 15 Minuten erneut.'); }
         set_transient($rate, $count + 1, 15 * MINUTE_IN_SECONDS);
         if (!BPM_Domain::valid_invitation($token) || !is_email($email)) { throw new InvalidArgumentException('Bitte einen gültigen Einladungscode und eine gültige E-Mail-Adresse angeben.'); }
-        $invite = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table('invites') . ' WHERE token_hash=%s AND state=%s AND expires_at>%s', BPM_Domain::token_hash($token), 'open', self::now()));
-        $h = $invite ? $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table('households') . ' WHERE id=%d', $invite->household_id)) : null;
+        $invite = BPM_Data::row($wpdb->prepare('SELECT * FROM ' . self::table('invites') . ' WHERE token_hash=%s AND state=%s AND expires_at>%s', BPM_Domain::token_hash($token), 'open', self::now()));
+        $h = $invite ? BPM_Data::row($wpdb->prepare('SELECT * FROM ' . self::table('households') . ' WHERE id=%d', $invite->household_id)) : null;
         if (!$h || self::past_deadline($h) || $h->user_id || ($h->expected_email && strcasecmp($h->expected_email, $email) !== 0) || email_exists($email)) { throw new InvalidArgumentException('Die Einladung kann mit diesen Angaben nicht verwendet werden. Bitte wenden Sie sich an die Verwaltung.'); }
         $lock = BPM_Domain::token();
         $claimed = $wpdb->query($wpdb->prepare('UPDATE ' . self::table('households') . ' SET registration_lock=%s WHERE id=%d AND user_id IS NULL AND registration_lock=%s AND status=%s', $lock, $h->id, '', 'invited'));
@@ -368,14 +356,14 @@ final class BPM_Portal {
             if ($taken !== 1) { throw new RuntimeException('Die Einladung ist nicht mehr gültig.'); }
             $user_id = wp_insert_user(['user_login' => 'mietpartei_' . $h->id . '_' . substr(BPM_Domain::token(), 0, 8), 'user_pass' => BPM_Domain::token(), 'user_email' => $email, 'display_name' => $h->label, 'role' => 'bpm_tenant', 'show_admin_bar_front' => 'false']);
             if (is_wp_error($user_id)) { throw new RuntimeException('Der Zugang konnte nicht angelegt werden. Bitte kontaktieren Sie die Verwaltung.'); }
-            $updated = $wpdb->update(self::table('households'), ['user_id' => $user_id, 'status' => 'pending_email', 'registration_lock' => ''], ['id' => $h->id, 'registration_lock' => $lock]);
+            $updated = BPM_Data::update(self::table('households'), ['user_id' => $user_id, 'status' => 'pending_email', 'registration_lock' => ''], ['id' => $h->id, 'registration_lock' => $lock]);
             if ($updated !== 1) { throw new RuntimeException('Die Zuordnung konnte nicht gespeichert werden. Bitte kontaktieren Sie die Verwaltung.'); }
-            $wpdb->update(self::table('invites'), ['state' => 'used', 'used_at' => self::now()], ['id' => $invite->id]);
+            BPM_Data::update(self::table('invites'), ['state' => 'used', 'used_at' => self::now()], ['id' => $invite->id]);
         } catch (Throwable $e) {
             // Fail closed: if a user was created, keep the claimed invitation for administrator review.
             if (!is_int($user_id) || $user_id === 0) {
-                $wpdb->update(self::table('invites'), ['state' => 'open'], ['id' => $invite->id, 'state' => 'claimed']);
-                $wpdb->update(self::table('households'), ['registration_lock' => ''], ['id' => $h->id, 'registration_lock' => $lock]);
+                BPM_Data::update(self::table('invites'), ['state' => 'open'], ['id' => $invite->id, 'state' => 'claimed']);
+                BPM_Data::update(self::table('households'), ['registration_lock' => ''], ['id' => $h->id, 'registration_lock' => $lock]);
             }
             throw $e;
         }
@@ -390,11 +378,13 @@ final class BPM_Portal {
     public static function download(): void {
         $hid = (int) (self::household()->id ?? 0);
         if (!self::manager() && !self::can_access(self::household())) { throw new RuntimeException('Keine Berechtigung.'); }
+        BPM_Security::limit('download-user',(string)get_current_user_id(),120,600);
+        BPM_Security::limit('download-ip',BPM_Security::ip(),240,600);
         $id = absint($_GET['id'] ?? 0);
         $photo = !empty($_GET['photo']);
         if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'] ?? '')), 'bpm_download_' . ($photo ? 'photo_' : 'doc_') . $id)) { throw new RuntimeException('Der Downloadlink ist abgelaufen. Bitte laden Sie die Portalseite neu.'); }
         $row = self::owned($photo ? 'readings' : 'documents', $id, $hid, self::manager());
-        $path = $photo ? BPM_Storage::path($row->photo_key) : null;
+        $photo_data = $photo ? BPM_Storage::plaintext($row->photo_key) : null;
         $verified = null;
         if (!$photo) {
             try { $verified = BPM_Storage::verified_document($row->storage_key, $row->sha256, (int) $row->bytes); }
@@ -404,10 +394,10 @@ final class BPM_Portal {
         header('Content-Type: ' . ($photo ? 'image/jpeg' : 'application/pdf'));
         header('Content-Security-Policy: sandbox');
         header('Content-Disposition: attachment; filename="' . sanitize_file_name($name) . '"; filename*=UTF-8\'\'' . rawurlencode($name));
-        header('Content-Length: ' . ($photo ? filesize($path) : (int) $row->bytes));
+        header('Content-Length: ' . ($photo ? strlen($photo_data) : (int) $row->bytes));
         if (!$photo) { header('Content-Digest: sha-256=:' . base64_encode(hex2bin($row->sha256)) . ':'); }
         self::event('file_download', (int) $row->household_id, $id);
-        if ($photo) { $sent = readfile($path); }
+        if ($photo) { echo $photo_data; $sent = strlen($photo_data); }
         else { try { $sent = fpassthru($verified); } finally { fclose($verified); } }
         if (!$photo && !self::manager() && $sent !== false && $sent === (int) $row->bytes && !connection_aborted()) {
             global $wpdb;

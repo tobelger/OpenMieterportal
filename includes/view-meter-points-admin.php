@@ -1,18 +1,18 @@
 <?php
 defined('ABSPATH') || exit;
 if (!BPM_Portal::manager()) { throw new RuntimeException('Keine Berechtigung.'); }
-$points=$wpdb->get_results($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('meter_points').' WHERE unit_id=%d ORDER BY label,id',$u->id));
+$points=BPM_Data::rows($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('meter_points').' WHERE unit_id=%d ORDER BY label,id',$u->id));
 $endpoint=admin_url('admin-post.php');
 ?>
 <section class="bpm-card"><h2>Messstellen und Zählergeräte</h2><p>Die Messstelle bleibt an der Wohnung. Jedes eingesetzte Gerät besitzt eine eigene Nummer und Gültigkeit. Ein Wechsel erhält beide Geräte und ihre Ablesungen.</p>
 <?php if(!$points): ?><p>Noch keine Messstellen vorhanden.</p><?php endif; foreach($points as $p):
-$devices=$wpdb->get_results($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('meters').' WHERE point_id=%d AND unit_id=%d ORDER BY installed_on DESC,id DESC',$p->id,$u->id));
+$devices=BPM_Data::rows($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('meters').' WHERE point_id=%d AND unit_id=%d ORDER BY installed_on DESC,id DESC',$p->id,$u->id));
 $open=array_values(array_filter($devices,static fn($d)=>!$d->removed_on)); ?>
 <details class="bpm-thread bpm-point"><summary><?= esc_html($p->label.' · '.$p->unit.' · '.count($devices).' Gerät(e)') ?></summary>
 <form method="post" action="<?= esc_url($endpoint) ?>"><?php BPM_Portal::form('point_save'); ?><input type="hidden" name="unit_id" value="<?= (int)$u->id ?>"><input type="hidden" name="point_id" value="<?= (int)$p->id ?>">
 <label>Bezeichnung der Messstelle<input name="point_label" required maxlength="160" value="<?= esc_attr($p->label) ?>"></label><label>Einheit<select name="unit"><?php foreach(['m³','kWh','Einheiten'] as $unit): ?><option <?= selected($p->unit,$unit,false) ?>><?= esc_html($unit) ?></option><?php endforeach; ?></select></label><button>Messstelle speichern</button></form>
 <h3>Gerätehistorie</h3><?php if(!$devices): ?><p>Noch kein Gerät an dieser Messstelle.</p><?php else: ?><div class="bpm-table-scroll"><table><thead><tr><th>Zählernummer</th><th>Gültig ab</th><th>Gültig bis</th><th>Status</th><th>Letzter Stand</th></tr></thead><tbody>
-<?php foreach($devices as $d): $last=$wpdb->get_row($wpdb->prepare('SELECT value,read_at FROM '.BPM_Portal::table('readings').' WHERE meter_id=%d ORDER BY read_at DESC,id DESC LIMIT 1',$d->id));$state=!$d->active?'Inaktiv':($d->installed_on&&$d->installed_on>BPM_Portal::today()?'Geplant':($d->removed_on&&$d->removed_on<BPM_Portal::today()?'Ausgebaut':($d->removed_on?'Endet am '.$d->removed_on:'Im Einsatz'))); ?>
+<?php foreach($devices as $d): $last=BPM_Data::row($wpdb->prepare('SELECT id,value,read_at FROM '.BPM_Portal::table('readings').' WHERE meter_id=%d ORDER BY read_at DESC,id DESC LIMIT 1',$d->id));$state=!$d->active?'Inaktiv':($d->installed_on&&$d->installed_on>BPM_Portal::today()?'Geplant':($d->removed_on&&$d->removed_on<BPM_Portal::today()?'Ausgebaut':($d->removed_on?'Endet am '.$d->removed_on:'Im Einsatz'))); ?>
 <tr><td><?= esc_html($d->number) ?></td><td><?= $d->installed_on?esc_html(mysql2date('d.m.Y',$d->installed_on)):'Noch unbekannt' ?></td><td><?= $d->removed_on?esc_html(mysql2date('d.m.Y',$d->removed_on)):'Offen' ?></td><td><?= esc_html($state) ?></td><td><?= $last?esc_html(BPM_Domain::reading_display($last->value).' '.$d->unit.' · '.mysql2date('d.m.Y',$last->read_at)):'Noch keine Ablesung' ?></td></tr>
 <?php endforeach; ?></tbody></table></div><?php endif; ?>
 <?php foreach($devices as $d): ?><details class="bpm-device"><summary><?= esc_html('Gerät '.$d->number.' bearbeiten') ?></summary>

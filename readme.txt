@@ -3,7 +3,7 @@ Contributors: tobelger
 Requires at least: 6.6
 Requires PHP: 8.1
 Requires Plugins: supportcandy
-Stable tag: 0.8.1
+Stable tag: 0.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,12 +49,18 @@ Die derzeitige Briefvorlage enthält noch die ursprüngliche Verwalterkennzeichn
 HTTPS verwenden. PHP-Limits: Upload mindestens 16M, POST mindestens 20M. PDFs maximal 15 MB, Fotos maximal 8 MB und 12 Megapixel.
 Der Speicher hat absichtlich keinen öffentlichen Upload-Fallback. Dateien werden ausschließlich nach Berechtigungsprüfung ausgeliefert.
 Die Integritätsprüfung verwendet den beim Upload gespeicherten Hash. Sie ersetzt keinen externen unveränderbaren Archivspeicher.
-Profildaten werden mit AES-256-GCM verschlüsselt. Der Schlüssel wird aus dem WordPress-Auth-Salt abgeleitet. wp-config.php und Salts müssen zusammen mit den Daten gesichert werden; eine Salt-Rotation benötigt eine vorherige Migration der verschlüsselten Profile.
+Separate Schlüsseldatei und explizite Sicherheitsmigration für eigene sensible Tabellenfelder, Profile und Portaldateien; AES-256-GCM mit gebundenem Datensatzkontext. Ein Update allein verschlüsselt bestehende Installationen nicht. Einrichtung und Wiederherstellung siehe SECURITY.md. Native WordPress-/SupportCandy-E-Mails, Tickettexte und Metadaten bleiben teilweise im Klartext.
 WP-Cron verarbeitet Sammelhinweise stündlich. Tägliche bzw. wöchentliche Hinweise werden frühestens 24 Stunden bzw. sieben Tage nach dem ersten vorgemerkten Ereignis versendet. Für zuverlässige Ausführung einen Hosting-Cron für WordPress einrichten. Fehlgeschlagene Hinweise bleiben zur Wiederholung vorgemerkt.
 Kontobestätigungen und Sicherheitsmails werden unabhängig vom gewählten Rhythmus sofort gesendet.
 Eine Bankangabe ist kein SEPA-Lastschriftmandat. Kommunikationsvereinbarungen, Aufbewahrungsfristen und Formvorgaben sind für den jeweiligen Einsatz zu prüfen.
 
 == Changelog ==
+
+= 0.9.0 =
+* Separate Datenschlüssel, kontextgebundene Feld- und Dateiverschlüsselung, explizite CLI-Migration und Schlüsselwechsel.
+* Passwortprüfung bei Bankänderung, sofortiger Sicherheitshinweis, Versuchslimits und begrenzte Sitzungen.
+* Optionale Verwaltungspflicht für das offizielle Two-Factor-Plugin.
+* Konfigurierbarer Briefkopf und Kommunikationsvereinbarung; keine Änderungen an Theme-Menüs oder Widgets.
 
 = 0.8.1 =
 * Lange Bezeichnungen der Mietbestandteile ohne Überlappung darstellen.

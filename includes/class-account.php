@@ -18,13 +18,15 @@ final class BPM_Account {
         global $wpdb;
         dbDelta('CREATE TABLE '.BPM_Portal::table('notification_queue')." (\nid bigint unsigned NOT NULL AUTO_INCREMENT,\nhousehold_id bigint unsigned NOT NULL,\ncreated_at datetime NOT NULL,\nPRIMARY KEY  (id),\nKEY household_id (household_id)\n) ".$wpdb->get_charset_collate().';');
     }
-    private static function key(): string { return hash_hkdf('sha256',wp_salt('auth'),32,'OpenMieterportal account data v1'); }
-    public static function encrypt(array $data): string {
+    private static function key(): string { return hash_hkdf('sha256',BPM_Crypto::legacy_auth_salt(),32,'OpenMieterportal account data v1'); }
+    public static function encrypt(array $data, int $uid = 0): string {
+        if (BPM_Crypto::configured()) { return BPM_Crypto::seal(wp_json_encode($data),'profile/'.$uid); }
         $iv=random_bytes(12);$tag='';$cipher=openssl_encrypt(wp_json_encode($data),'aes-256-gcm',self::key(),OPENSSL_RAW_DATA,$iv,$tag,'bpm-account-v1');
         if($cipher===false)throw new RuntimeException('Profildaten konnten nicht geschützt gespeichert werden.');
         return base64_encode($iv.$tag.$cipher);
     }
-    public static function decrypt(string $encoded): array {
+    public static function decrypt(string $encoded, int $uid = 0): array {
+        if (BPM_Crypto::sealed($encoded)) { return json_decode(BPM_Crypto::open($encoded,'profile/'.$uid),true,32,JSON_THROW_ON_ERROR); }
         $raw=base64_decode($encoded,true);if($raw===false||strlen($raw)<29)throw new RuntimeException('Profildaten sind nicht lesbar.');
         $plain=openssl_decrypt(substr($raw,28),'aes-256-gcm',self::key(),OPENSSL_RAW_DATA,substr($raw,0,12),substr($raw,12,16),'bpm-account-v1');
         $data=$plain===false?null:json_decode($plain,true);
@@ -34,8 +36,8 @@ final class BPM_Account {
     public static function profile(object $h): array {
         global $wpdb;
         $saved=get_user_meta((int)$h->user_id,'bpm_account_profile',true);
-        if($saved)return self::decrypt($saved);
-        $address=$h->unit_id?$wpdb->get_var($wpdb->prepare('SELECT b.address FROM '.BPM_Portal::table('units').' u JOIN '.BPM_Portal::table('buildings').' b ON b.id=u.building_id WHERE u.id=%d',$h->unit_id)):'';
+        if($saved)return self::decrypt($saved,(int)$h->user_id);
+        $address=$h->unit_id?(BPM_Portal::unit((int)$h->unit_id)->address??''):'';
         if(!$address)$address=explode(' · ',$h->unit_label)[0];
         return ['address'=>$address,'phone'=>'','holder'=>'','iban'=>'','bic'=>''];
     }
@@ -59,7 +61,11 @@ final class BPM_Account {
     }
     public static function save_profile(object $h,array $data): void {
         $uid=self::owner($h);$profile=self::validate_profile($data);
-        update_user_meta($uid,'bpm_account_profile',self::encrypt($profile));
+        $old=self::profile($h);
+        $bank_changed=false;foreach(['holder','iban','bic'] as $field)if(($old[$field]??'')!==$profile[$field])$bank_changed=true;
+        if($bank_changed && !wp_check_password((string)($data['current_password']??''),get_userdata($uid)->user_pass,$uid)) { throw new InvalidArgumentException('Bitte bestätigen Sie die Änderung der Bankverbindung mit Ihrem aktuellen Passwort.'); }
+        update_user_meta($uid,'bpm_account_profile',self::encrypt($profile,$uid));
+        if($bank_changed){BPM_Portal::event('account_bank_updated',(int)$h->id);if(!BPM_Portal::mail(get_userdata($uid)->user_email,'Mieterportal: Bankverbindung geändert','Die Bankverbindung Ihres Mieterzugangs wurde geändert. Falls Sie die Änderung nicht veranlasst haben, melden Sie sich bitte umgehend bei der Verwaltung und ändern Sie Ihr Passwort. Es werden keine Bankdaten per E-Mail versendet.'))BPM_Portal::event('mail_failed',(int)$h->id);}
         BPM_Portal::event('account_profile_updated',(int)$h->id);
         BPM_Portal::notify((int)$h->id,false);
     }
@@ -98,7 +104,7 @@ final class BPM_Account {
             if(email_exists($p['email']))throw new InvalidArgumentException('Diese E-Mail-Adresse kann nicht mehr verwendet werden.');
             $result=wp_update_user(['ID'=>$uid,'user_email'=>$p['email']]);if(is_wp_error($result))throw new RuntimeException('Die E-Mail-Adresse konnte nicht geändert werden.');
             delete_user_meta($uid,'bpm_pending_email');
-            global $wpdb;$wpdb->update(BPM_Portal::table('households'),['expected_email'=>$p['email']],['id'=>(int)$h->id]);
+            global $wpdb;BPM_Data::update(BPM_Portal::table('households'),['expected_email'=>$p['email']],['id'=>(int)$h->id]);
             BPM_Portal::event('account_email_confirmed',(int)$h->id);
         });
     }
@@ -111,7 +117,7 @@ final class BPM_Account {
         global $wpdb;
         if($wpdb->insert(BPM_Portal::table('notification_queue'),['household_id'=>$hid,'created_at'=>BPM_Portal::now()])===false)throw new RuntimeException('Der Benachrichtigungshinweis konnte nicht gespeichert werden.');
         // The cron worker also retries failed immediate deliveries.
-        $h=$wpdb->get_row($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('households').' WHERE id=%d',$hid));
+        $h=BPM_Data::row($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('households').' WHERE id=%d',$hid));
         if($h&&self::frequency((int)$h->user_id)==='immediate')self::digest($hid);
     }
     public static function digest(int $only=0): void {
@@ -120,9 +126,9 @@ final class BPM_Account {
         if($old && (int)$old<time()-600)delete_option($key);
         if(!add_option($key,$lock,'',false))return;
         try{
-            $groups=$wpdb->get_results('SELECT household_id,MAX(id) max_id,MIN(created_at) first_at,COUNT(*) count FROM '.BPM_Portal::table('notification_queue').($only?$wpdb->prepare(' WHERE household_id=%d',$only):'').' GROUP BY household_id');
+            $groups=BPM_Data::rows('SELECT household_id,MAX(id) max_id,MIN(created_at) first_at,COUNT(*) count FROM '.BPM_Portal::table('notification_queue').($only?$wpdb->prepare(' WHERE household_id=%d',$only):'').' GROUP BY household_id');
             foreach($groups as $g){
-                $h=$wpdb->get_row($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('households').' WHERE id=%d',$g->household_id));
+                $h=BPM_Data::row($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('households').' WHERE id=%d',$g->household_id));
                 if(!$h||!BPM_Portal::can_access($h)||!$h->user_id)continue;
                 $f=self::frequency((int)$h->user_id);$delay=['immediate'=>0,'daily'=>DAY_IN_SECONDS,'weekly'=>7*DAY_IN_SECONDS][$f];
                 if(strtotime($g->first_at.' UTC')+$delay>time())continue;

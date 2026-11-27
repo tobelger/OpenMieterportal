@@ -24,6 +24,7 @@ final class BPM_Storage {
 
     public static function upload(array $file, bool $pdf): array {
         $root = self::root();
+        if(get_option('bpm_files_encryption_required',false))BPM_Crypto::ring();
         if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($file['tmp_name'] ?? '')) {
             throw new InvalidArgumentException('Die Datei konnte nicht hochgeladen werden.');
         }
@@ -36,66 +37,50 @@ final class BPM_Storage {
         $key = bin2hex(random_bytes(24));
         $target = $root . '/' . $key;
         if ($pdf) {
-            if ($mime !== 'application/pdf' || file_get_contents($tmp, false, null, 0, 5) !== '%PDF-') {
-                throw new InvalidArgumentException('Bitte eine gültige PDF-Datei auswählen.');
-            }
-            // Exclusive creation: a published file is never overwritten by an upload.
-            $output = @fopen($target, 'xb');
-            if (!$output) { throw new RuntimeException('Die Datei konnte nicht sicher gespeichert werden.'); }
-            $input = @fopen($tmp, 'rb');
-            try {
-                if (!$input || stream_copy_to_stream($input, $output) !== $size) {
-                    throw new RuntimeException('Die Datei konnte nicht vollständig gespeichert werden.');
-                }
-            } catch (Throwable $e) { @unlink($target); throw $e; }
-            finally { if (is_resource($input)) { fclose($input); } fclose($output); }
-            $mime = 'application/pdf';
-            $name = sanitize_file_name($file['name']);
-            if (strtolower(pathinfo($name, PATHINFO_EXTENSION)) !== 'pdf') { $name .= '.pdf'; }
+            if ($mime !== 'application/pdf' || file_get_contents($tmp, false, null, 0, 5) !== '%PDF-') { throw new InvalidArgumentException('Bitte eine gültige PDF-Datei auswählen.'); }
+            $plain=file_get_contents($tmp);$name=sanitize_file_name($file['name']);
+            if(strtolower(pathinfo($name,PATHINFO_EXTENSION))!=='pdf')$name.='.pdf';
         } else {
-            if (!in_array($mime, ['image/jpeg', 'image/png'], true) || !extension_loaded('gd')) {
-                throw new InvalidArgumentException('Bitte ein JPG- oder PNG-Foto auswählen. Das Bildmodul muss verfügbar sein.');
-            }
-            $info = @getimagesize($tmp);
-            if (!$info || $info[0] < 1 || $info[1] < 1 || $info[0] * $info[1] > 12000000) {
-                throw new InvalidArgumentException('Das Foto darf höchstens 12 Megapixel groß sein.');
-            }
-            $image = $mime === 'image/jpeg' ? @imagecreatefromjpeg($tmp) : @imagecreatefrompng($tmp);
-            if (!$image) { throw new InvalidArgumentException('Das Foto ist nicht lesbar.'); }
-            // Re-encoding strips EXIF/GPS and any appended payload. No original is retained.
-            imagealphablending($image, true);
-            $ok = imagejpeg($image, $target, 88);
-            imagedestroy($image);
-            if (!$ok) { throw new RuntimeException('Das Foto konnte nicht gespeichert werden.'); }
-            $mime = 'image/jpeg';
-            $name = 'zaehlerfoto.jpg';
+            if(!in_array($mime,['image/jpeg','image/png'],true)||!extension_loaded('gd'))throw new InvalidArgumentException('Bitte ein JPG- oder PNG-Foto auswählen.');
+            $info=@getimagesize($tmp);if(!$info||$info[0]<1||$info[1]<1||$info[0]*$info[1]>12000000)throw new InvalidArgumentException('Das Foto darf höchstens 12 Megapixel groß sein.');
+            $image=$mime==='image/jpeg'?@imagecreatefromjpeg($tmp):@imagecreatefrompng($tmp);if(!$image)throw new InvalidArgumentException('Das Foto ist nicht lesbar.');
+            imagealphablending($image,true);ob_start();try{$ok=imagejpeg($image,null,88);$plain=ob_get_contents();}finally{ob_end_clean();imagedestroy($image);}
+            if(!$ok)throw new RuntimeException('Das Foto konnte nicht gespeichert werden.');$mime='image/jpeg';$name='zaehlerfoto.jpg';
         }
-        if (!chmod($target, $pdf ? 0400 : 0600)) { @unlink($target); throw new RuntimeException('Die Dateirechte konnten nicht gesetzt werden.'); }
-        return ['storage_key' => $key, 'filename' => $name, 'mime' => $mime, 'bytes' => filesize($target), 'sha256' => hash_file('sha256', $target)];
+        if(!is_string($plain)||$plain==='')throw new RuntimeException('Die Datei konnte nicht vollständig gelesen werden.');
+        $bytes=strlen($plain);$hash=hash('sha256',$plain);
+        $stored=BPM_Crypto::configured()?BPM_Crypto::seal($plain,'file/'.$key):$plain;
+        $output=@fopen($target,'xb');if(!$output)throw new RuntimeException('Die Datei konnte nicht sicher gespeichert werden.');
+        try{if(!chmod($target,$pdf?0400:0600)||fwrite($output,$stored)!==strlen($stored))throw new RuntimeException('Die geschützte Datei konnte nicht vollständig gespeichert werden.');}
+        catch(Throwable $e){@unlink($target);throw $e;}finally{fclose($output);}
+        return ['storage_key'=>$key,'filename'=>$name,'mime'=>$mime,'bytes'=>$bytes,'sha256'=>$hash];
     }
-
-    /** Return only a verified snapshot, so checking and sending use identical bytes. */
-    public static function verified_document(string $key, string $sha256, int $bytes) {
-        if (!preg_match('/^[a-f0-9]{64}$/D', $sha256) || $bytes < 1 || $bytes > 15 * 1024 * 1024) {
-            throw new RuntimeException('Das Dokument konnte nicht auf Unverändertheit geprüft werden. Bitte wenden Sie sich an die Verwaltung.');
+    public static function plaintext(string $key,bool $migration=false): string {
+        $path=self::path($key);$size=filesize($path);
+        if($size===false||$size<1||$size>32*1024*1024)throw new RuntimeException('Die Datei hat eine ungültige Größe.');
+        $stored=file_get_contents($path);
+        if(BPM_Crypto::sealed($stored))return BPM_Crypto::open($stored,'file/'.$key);
+        if(!$migration&&get_option('bpm_files_encryption_required',false))throw new RuntimeException('Eine unverschlüsselte Datei wurde blockiert.');
+        return $stored;
+    }
+    /** Plaintext snapshots stay in memory and are returned only after access checks. */
+    public static function verified_document(string $key,string $sha256,int $bytes) {
+        if(!preg_match('/^[a-f0-9]{64}$/D',$sha256)||$bytes<1||$bytes>15*1024*1024)throw new RuntimeException('Das Dokument konnte nicht geprüft werden.');
+        $plain=self::plaintext($key);
+        if(strlen($plain)!==$bytes||!hash_equals($sha256,hash('sha256',$plain)))throw new RuntimeException('Die Integritätsprüfung dieses Dokuments ist fehlgeschlagen.');
+        $snapshot=fopen('php://memory','w+b');if(!$snapshot||fwrite($snapshot,$plain)!==$bytes){if(is_resource($snapshot))fclose($snapshot);throw new RuntimeException('Das Dokument konnte nicht bereitgestellt werden.');}rewind($snapshot);return $snapshot;
+    }
+    public static function migrate_files(): int {
+        global $wpdb;BPM_Crypto::ring();$root=self::root();$count=0;
+        foreach(glob($root.'/*') as $path){$key=basename($path);if(!preg_match('/^[a-f0-9]{48}$/D',$key)||!is_file($path))continue;
+            $plain=self::plaintext($key,true);$doc=BPM_Data::row($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('documents').' WHERE storage_key=%s',$key));
+            if($doc&&(strlen($plain)!==(int)$doc->bytes||!hash_equals($doc->sha256,hash('sha256',$plain))))throw new RuntimeException('Eine Bestandsdatei hat die Integritätsprüfung nicht bestanden.');
+            $stored=BPM_Crypto::seal($plain,'file/'.$key);if(!hash_equals($plain,BPM_Crypto::open($stored,'file/'.$key)))throw new RuntimeException('Die Dateimigration konnte nicht verifiziert werden.');
+            $tmp=$root.'/.migration-'.bin2hex(random_bytes(16));$out=fopen($tmp,'xb');if(!$out)throw new RuntimeException('Die Dateimigration konnte nicht vorbereitet werden.');
+            try{if(!chmod($tmp,$doc?0400:0600)||fwrite($out,$stored)!==strlen($stored))throw new RuntimeException('Die Dateimigration konnte nicht gespeichert werden.');}catch(Throwable $e){@unlink($tmp);throw $e;}finally{fclose($out);}
+            if(!rename($tmp,$path)){@unlink($tmp);throw new RuntimeException('Die Dateimigration konnte nicht abgeschlossen werden.');}$count++;
         }
-        $source = @fopen(self::path($key), 'rb');
-        $snapshot = fopen('php://temp/maxmemory:2097152', 'w+b');
-        try {
-            if (!$source || !$snapshot) { throw new RuntimeException('Das Dokument ist nicht verfügbar.'); }
-            $copied = stream_copy_to_stream($source, $snapshot, $bytes + 1);
-            rewind($snapshot);
-            $hash = hash_init('sha256');
-            hash_update_stream($hash, $snapshot);
-            if ($copied !== $bytes || !hash_equals($sha256, hash_final($hash))) {
-                throw new RuntimeException('Die Integritätsprüfung dieses Dokuments ist fehlgeschlagen. Der Abruf wurde gesperrt. Bitte wenden Sie sich an die Verwaltung.');
-            }
-            rewind($snapshot);
-            return $snapshot;
-        } catch (Throwable $e) {
-            if (is_resource($snapshot)) { fclose($snapshot); }
-            throw $e;
-        } finally { if (is_resource($source)) { fclose($source); } }
+        update_option('bpm_files_encryption_required',true,false);return $count;
     }
 
     public static function path(string $key): string {

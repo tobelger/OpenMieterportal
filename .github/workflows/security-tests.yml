@@ -1,0 +1,50 @@
+name: Portal security regression
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: omp_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Syntax and isolated checks
+        run: |
+          set -eu
+          find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
+          php tests/test-domain.php
+          php tests/test-reading-display.php
+          php tests/test-storage.php
+          php tests/test-document-integrity.php
+      - name: Disposable WordPress installation
+        run: |
+          set -eu
+          curl -fsSL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /tmp/wp-cli.phar
+          mkdir -p /tmp/omp-wp
+          php /tmp/wp-cli.phar core download --path=/tmp/omp-wp
+          php /tmp/wp-cli.phar config create --path=/tmp/omp-wp --dbname=omp_test --dbuser=root --dbpass='' --dbhost=127.0.0.1:3306
+          php /tmp/wp-cli.phar config set DISABLE_WP_CRON true --raw --path=/tmp/omp-wp
+          php /tmp/wp-cli.phar core install --path=/tmp/omp-wp --url=http://127.0.0.1:8974 --title='Disposable portal test' --admin_user=fixtureadmin --admin_password="$(openssl rand -hex 24)" --admin_email=fixture@example.test --skip-email
+          php /tmp/wp-cli.phar plugin install supportcandy --activate --path=/tmp/omp-wp
+          ln -s "$GITHUB_WORKSPACE" /tmp/omp-wp/wp-content/plugins/belger-mieterportal
+          php /tmp/wp-cli.phar plugin activate belger-mieterportal --path=/tmp/omp-wp
+      - name: Account, encryption and notification checks
+        env:
+          BPM_TEST_WP_LOAD: /tmp/omp-wp/wp-load.php
+        run: |
+          set -eu
+          php tests/test-account.php
+          php tests/test-encryption.php
+          php tests/test-ticket-notifications.php /tmp/omp-wp/wp-content/plugins/supportcandy/includes/class-wpsc-email-notifications.php

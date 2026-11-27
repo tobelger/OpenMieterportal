@@ -67,7 +67,7 @@ final class BPM_Rent_Terms {
             if (!$wpdb->get_var($wpdb->prepare("SELECT id FROM $households WHERE id=%d FOR UPDATE", $household->id))) {
                 throw new InvalidArgumentException('Die Mietpartei wurde nicht gefunden.');
             }
-            $existing = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE household_id=%d AND effective_from=%s FOR UPDATE", $household->id, $effective));
+            $existing = BPM_Data::row($wpdb->prepare("SELECT * FROM $table WHERE household_id=%d AND effective_from=%s FOR UPDATE", $household->id, $effective));
             $data = self::form_amounts($input, $existing) + [
                 'household_id' => (int) $household->id,
                 'effective_from' => $effective,
@@ -75,7 +75,7 @@ final class BPM_Rent_Terms {
                 'actor_id' => get_current_user_id(),
             ];
             if ($existing) {
-                if ($wpdb->update($table, $data, ['id' => $existing->id]) === false) {
+                if (BPM_Data::update($table, $data, ['id' => $existing->id]) === false) {
                     throw new RuntimeException('Die Mietbeträge konnten nicht gespeichert werden.');
                 }
                 $id = (int) $existing->id;

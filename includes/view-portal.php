@@ -4,7 +4,7 @@ $h = BPM_Portal::household();
 $endpoint = admin_url('admin-post.php');
 ?>
 <div class="bpm-portal">
-  <?php if ($show_header ?? true): ?><header class="bpm-head"><p class="bpm-eyebrow">Belger Immobilienverwaltung</p><h2>Ihr Mieterportal</h2><p>Ein gemeinsamer Zugang. Alles rund um Ihr Mietverhältnis.</p></header><?php endif; ?>
+  <?php if ($show_header ?? true): ?><header class="bpm-head"><p class="bpm-eyebrow"><?= esc_html(BPM_Settings::value('name')) ?></p><h2>Ihr Mieterportal</h2><p>Ein gemeinsamer Zugang. Alles rund um Ihr Mietverhältnis.</p></header><?php endif; ?>
 <?php if (!is_user_logged_in()): ?>
   <div class="bpm-columns">
     <?php if (!BPM_Portal::is_activation()): ?><section class="bpm-card"><h3>Willkommen zurück</h3><p>Melden Sie sich mit dem gemeinsamen Zugang Ihrer Mietpartei an.</p>
@@ -30,12 +30,12 @@ $endpoint = admin_url('admin-post.php');
   </section>
 <?php else:
     $hid = (int) $h->id;
-    $documents = $wpdb->get_results($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('documents') . ' WHERE household_id=%d ORDER BY created_at DESC, id DESC LIMIT 100', $hid));
+    $documents = BPM_Data::rows($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('documents') . ' WHERE household_id=%d ORDER BY created_at DESC, id DESC LIMIT 100', $hid));
     $meters = BPM_Portal::meters_for($h);
-    $readings = $wpdb->get_results($wpdb->prepare('SELECT r.*, m.number, m.label, m.unit FROM ' . BPM_Portal::table('readings') . ' r JOIN ' . BPM_Portal::table('meters') . ' m ON m.id=r.meter_id WHERE r.household_id=%d ORDER BY r.read_at DESC, r.id DESC LIMIT 50', $hid));
-    $threads = $wpdb->get_results($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('threads') . ' WHERE household_id=%d ORDER BY updated_at DESC, id DESC LIMIT 30', $hid));
-    $preference = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('preferences') . ' WHERE household_id=%d ORDER BY id DESC LIMIT 1', $hid));
-    $needs_communication = (bool) get_option('bpm_consent_enabled') && (!$preference || $preference->choice !== 'portal' || $preference->version !== BPM_Domain::CONSENT_VERSION);
+    $readings = BPM_Data::rows($wpdb->prepare('SELECT r.*, m.number, m.label, m.unit FROM ' . BPM_Portal::table('readings') . ' r JOIN ' . BPM_Portal::table('meters') . ' m ON m.id=r.meter_id WHERE r.household_id=%d ORDER BY r.read_at DESC, r.id DESC LIMIT 50', $hid));
+    $threads = BPM_Data::rows($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('threads') . ' WHERE household_id=%d ORDER BY updated_at DESC, id DESC LIMIT 30', $hid));
+    $preference = BPM_Data::row($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('preferences') . ' WHERE household_id=%d ORDER BY id DESC LIMIT 1', $hid));
+    $needs_communication = (bool) get_option('bpm_consent_enabled') && (!$preference || $preference->choice !== 'portal' || $preference->version !== BPM_Settings::consent_version());
 ?>
   <?php if ($needs_communication): require __DIR__ . '/view-communication.php'; endif; ?>
   <div class="bpm-account"><div><strong><?= esc_html($h->label) ?></strong><span><?= esc_html($h->unit_label) ?></span></div><details class="bpm-user-menu"><summary aria-label="Benutzerkonto"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="7" r="4"/><path d="M4 22v-2a8 8 0 0 1 16 0v2"/></svg><span class="screen-reader-text">Benutzerkonto</span><span aria-hidden="true">▾</span></summary><div class="bpm-user-dropdown"><a href="#bpm-account-profile">Mein Profil</a><a href="#bpm-settings">Einstellungen</a><a href="<?= esc_url(wp_logout_url(BPM_Portal::url())) ?>">Abmelden</a></div></details></div>
@@ -58,7 +58,7 @@ $endpoint = admin_url('admin-post.php');
       </form>
     </details>
     <?php if (!$threads): ?><p class="bpm-empty">Hier finden Sie künftig Ihre Nachrichten und die Antworten der Verwaltung.</p><?php endif; ?>
-    <?php foreach ($threads as $thread): $messages = $wpdb->get_results($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('messages') . ' WHERE thread_id=%d ORDER BY id ASC LIMIT 100', $thread->id)); ?>
+    <?php foreach ($threads as $thread): $messages = BPM_Data::rows($wpdb->prepare('SELECT * FROM ' . BPM_Portal::table('messages') . ' WHERE thread_id=%d ORDER BY id ASC LIMIT 100', $thread->id)); ?>
       <details class="bpm-thread"><summary><?= esc_html($thread->subject) ?> <span class="bpm-badge"><?= esc_html(str_replace('_', ' ', $thread->status)) ?></span></summary>
         <?php foreach ($messages as $message): ?><article class="bpm-message"><p class="bpm-small"><strong><?= (int) $message->user_id === (int) $h->user_id ? 'Ihre Mietpartei' : 'Verwaltung' ?></strong> · <?= esc_html(get_date_from_gmt($message->created_at, 'd.m.Y H:i')) ?></p><p><?= nl2br(esc_html($message->body)) ?></p></article><?php endforeach; ?>
         <form method="post" action="<?= esc_url($endpoint) ?>"><?php BPM_Portal::form('reply'); ?><input type="hidden" name="thread_id" value="<?= (int) $thread->id ?>"><label for="bpm-reply-<?= (int) $thread->id ?>">Antwort</label><textarea id="bpm-reply-<?= (int) $thread->id ?>" name="body" rows="3" maxlength="5000" required></textarea><button type="submit">Antwort senden</button></form>

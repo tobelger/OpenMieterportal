@@ -101,8 +101,8 @@ final class BPM_Tickets {
             BPM_Portal::insert('ticket_links', ['ticket_id'=>$ticket->id,'household_id'=>$h->id,'legacy_thread_id'=>$legacy,'created_at'=>BPM_Portal::now()]);
         }
         $fields = get_option('bpm_supportcandy_fields', []);
-        $values = ['reference'=>$h->reference, 'unit'=>$h->unit_label, 'building'=>''];
-        if ($h->unit_id) { $unit=BPM_Portal::unit((int)$h->unit_id); $values['building']=$unit->building_label; }
+        $values = ['reference'=>$h->reference, 'unit'=>'', 'building'=>''];
+        if ($h->unit_id) { $unit=BPM_Portal::unit((int)$h->unit_id); $values['unit']=$unit->reference; $building=BPM_Data::row($wpdb->prepare('SELECT * FROM '.BPM_Portal::table('buildings').' WHERE id=%d',$unit->building_id)); $values['building']=$building->reference??''; }
         foreach ($fields as $name=>$slug) { $ticket->{$slug} = $values[$name] ?? ''; }
         $ticket->save();
     }

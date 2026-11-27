@@ -17,6 +17,7 @@ Lizenz: **GPL-2.0-or-later**. Es sind keine kostenpflichtigen Erweiterungen erfo
 - Registerkarten und ein Kontomenü für Profil, Einstellungen und Abmelden.
 - Verschlüsselt gespeicherte Anschrift, Telefonnummer und Bankverbindung. Kontoinhaber und gültige IBAN sind Pflicht beim Speichern der Profilangaben.
 - E-Mail-Wechsel mit Passwortprüfung und einmaliger Bestätigung der neuen Adresse; die alte Adresse bleibt bis dahin aktiv.
+- Passwortprüfung bei Änderungen der Bankverbindung; sofortiger allgemeiner Sicherheitshinweis ohne Bankdaten.
 - Benachrichtigungen sofort, täglich oder wöchentlich. Bestätigungs- und Sicherheitsmails werden sofort versendet.
 - Versionierte Kommunikationswahl und Zugang längstens 25 Monate nach Mietende.
 
@@ -61,7 +62,7 @@ wp option update bpm_supportcandy_enabled production
 
 ### Briefvorlage und technische Kompatibilität
 
-Die Anwendung entstand aus einer konkreten Immobilienverwaltung. Die aktuelle Einladungsbrief-Vorlage enthält noch deren öffentliche Verwalterkennzeichnung und Logo-Verweis. Andere Verwaltungen müssen die Vorlage vor Einsatz anpassen. Die Veröffentlichung enthält keine Mieterdaten oder Zugangsdaten.
+Verwaltungsname, Anschrift, Logo, Kontaktdaten und Kommunikationsvereinbarung werden in der Portalverwaltung eingestellt. Das Plugin verändert keine Theme-Menüs, Widgets oder Divi-Seitenvorlagen. Die Veröffentlichung enthält keine Mieterdaten oder Zugangsdaten.
 
 OpenMieterportal verwendet den Shortcode `[openmieterportal]`. Bestehende Installationen und bereits eingerichtete Seiten bleiben bei einem Update kompatibel; vorhandene Datenbanktabellen werden beibehalten.
 
@@ -69,13 +70,15 @@ OpenMieterportal verwendet den Shortcode `[openmieterportal]`. Bestehende Instal
 
 - PDFs: höchstens 15 MB. Fotos: JPG/PNG, höchstens 8 MB und 12 Megapixel; Bilder werden neu codiert, EXIF/GPS werden nicht übernommen.
 - PHP-Konfiguration: `upload_max_filesize` mindestens 16M, `post_max_size` mindestens 20M. Eine gepflegte PHP-Version verwenden.
-- Persönliche Profildaten werden mit AES-256-GCM verschlüsselt. Der Schlüssel wird aus dem WordPress-Auth-Salt abgeleitet. **Bei Backups müssen `wp-config.php` und die Salts erhalten bleiben. Eine Salt-Rotation benötigt vorher eine Migration dieser verschlüsselten Daten.**
+- Die optionale Sicherheitsmigration verschlüsselt eigene sensible Tabellenfelder, Profile und Portaldateien mit AES-256-GCM und einem separaten Schlüsselring. Datensatz-/Benutzer-/Dateikontext ist authentifiziert. Einrichtung, Grenzen, Schlüsselwechsel und Wiederherstellung: [SECURITY.md](SECURITY.md). Ohne Einrichtung des separaten Schlüssels bleiben alte Installationen im bisherigen Speichermodus; ein Update allein verschlüsselt den Bestand nicht.
 - Sammelhinweise werden stündlich geprüft und frühestens nach 24 Stunden bzw. sieben Tagen seit dem ersten vorgemerkten Ereignis gesendet. WP-Cron kann bei geringer Besuchsfrequenz verspätet laufen. Fehlgeschlagene Hinweise bleiben für einen erneuten Versuch vorgemerkt.
 - Die Integritätsprüfung erkennt Änderungen gegenüber der gespeicherten Prüfsumme. Sie ist kein unabhängiger unveränderbarer Archivspeicher und keine allgemeine Zusage rechtlicher Konformität.
 - Eine hinterlegte Bankverbindung ist kein SEPA-Lastschriftmandat. Die Vorlage der Kommunikationsvereinbarung ist für den jeweiligen Einsatz zu prüfen.
 - Es gibt keine automatische Übernahme von Portaländerungen in WISO oder andere Buchhaltungssysteme.
 
 ## Entwicklung und Tests
+
+GitHub Actions führt Syntax-, Konto-, Verschlüsselungs-, Dateiintegritäts- und Ticket-Empfängertests mit einer frischen lokalen WordPress-/MySQL-Instanz aus. Der Workflow hat nur Leserechte und keine Produktionszugänge oder automatische Bereitstellung.
 
 Selbstständige Prüfungen ohne WordPress:
 
@@ -90,6 +93,12 @@ Der Account-Integrationstest benötigt eine **ausschließlich lokale, wegwerfbar
 
 ```sh
 BPM_TEST_WP_LOAD=/path/to/local/wordpress/wp-load.php php tests/test-account.php
+```
+
+Der Verschlüsselungstest benötigt ebenfalls die isolierte lokale WordPress-Datenbank, erzeugt nur synthetische Daten und fängt E-Mails ab:
+
+```sh
+BPM_TEST_WP_LOAD=/path/to/local/wordpress/wp-load.php php tests/test-encryption.php
 ```
 
 Weitere Tests der konkreten Hosting- und Theme-Integration bleiben umgebungsspezifisch. Bei Änderungen insbesondere die Trennung der Mietparteien, E-Mail-Bestätigung, Dateischutz und SupportCandy-Zugriffe erneut prüfen.

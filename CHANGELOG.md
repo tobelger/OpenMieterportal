@@ -1,5 +1,15 @@
 # Änderungen
 
+## 0.7.4
+
+- SupportCandy-Empfänger werden vor der nativen Empfängerprüfung gefiltert. Unterdrückte Test- und Sammelbenachrichtigungen erzeugen keine empfängerlosen SMTP-Aufträge.
+- Regressionstest mit 26 Prüfungen gegen SupportCandys eigenen Validierungsablauf.
+
+## 0.7.3
+
+- Optionaler Hinweis auf die Nutzung des Portals statt Antworten auf Benachrichtigungsmails.
+- Gemeinsame Mailfunktion für Aktivierung, Kontobestätigung und Benachrichtigungen. SMTP-Zugangsdaten und Absender bleiben außerhalb des Plugin-Codes in der Mailplugin-Konfiguration.
+
 ## 0.7.2
 
 - Produktbezeichnung OpenMieterportal in der Dokumentation vereinheitlicht.

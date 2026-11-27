@@ -3,7 +3,7 @@ Contributors: tobelger
 Requires at least: 6.6
 Requires PHP: 8.1
 Requires Plugins: supportcandy
-Stable tag: 0.7.2
+Stable tag: 0.7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,10 @@ Profildaten werden mit AES-256-GCM verschlüsselt. Der Schlüssel wird aus dem W
 WP-Cron verarbeitet Sammelhinweise stündlich. Tägliche bzw. wöchentliche Hinweise werden frühestens 24 Stunden bzw. sieben Tage nach dem ersten vorgemerkten Ereignis versendet. Für zuverlässige Ausführung einen Hosting-Cron für WordPress einrichten. Fehlgeschlagene Hinweise bleiben zur Wiederholung vorgemerkt.
 Kontobestätigungen und Sicherheitsmails werden unabhängig vom gewählten Rhythmus sofort gesendet.
 Eine Bankangabe ist kein SEPA-Lastschriftmandat. Kommunikationsvereinbarungen, Aufbewahrungsfristen und Formvorgaben sind für den jeweiligen Einsatz zu prüfen.
+
+== Changelog ==
+= 0.7.4 =
+* SupportCandy-Empfänger werden vor der nativen Empfängerprüfung gefiltert. Unterdrückte Test- und Sammelbenachrichtigungen erzeugen keine empfängerlosen SMTP-Aufträge mehr.
 
 == Lizenz ==
 GPL-2.0-or-later. qrcode-generator steht unter MIT; siehe THIRD-PARTY-NOTICES.txt.

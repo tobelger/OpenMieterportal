@@ -85,7 +85,7 @@ final class BPM_Account {
             $old=get_user_meta($uid,'bpm_pending_email',true);$token=bin2hex(random_bytes(32));
             update_user_meta($uid,'bpm_pending_email',['email'=>$email,'hash'=>hash('sha256',$token),'expires'=>time()+DAY_IN_SECONDS]);
             $url=BPM_Portal::url().'#email-bestaetigen='.$token;
-            $sent=wp_mail($email,'Mieterportal: Neue E-Mail-Adresse bestätigen',"Sie möchten diese E-Mail-Adresse für Ihren Mieterzugang verwenden. Öffnen Sie den folgenden Link, melden Sie sich mit Ihrem bisherigen Konto an und bestätigen Sie die Änderung im Profil:\n\n$url\n\nDer Link ist 24 Stunden gültig und kann nur einmal verwendet werden. Bis zur Bestätigung bleibt Ihre bisherige E-Mail-Adresse aktiv. Wenn Sie die Änderung nicht angefordert haben, verwenden Sie den Link nicht.");
+            $sent=BPM_Portal::mail($email,'Mieterportal: Neue E-Mail-Adresse bestätigen',"Sie möchten diese E-Mail-Adresse für Ihren Mieterzugang verwenden. Öffnen Sie den folgenden Link, melden Sie sich mit Ihrem bisherigen Konto an und bestätigen Sie die Änderung im Profil:\n\n$url\n\nDer Link ist 24 Stunden gültig und kann nur einmal verwendet werden. Bis zur Bestätigung bleibt Ihre bisherige E-Mail-Adresse aktiv. Wenn Sie die Änderung nicht angefordert haben, verwenden Sie den Link nicht.");
             if(!$sent){if($old)update_user_meta($uid,'bpm_pending_email',$old);else delete_user_meta($uid,'bpm_pending_email');throw new RuntimeException('Die Bestätigungsmail konnte nicht versendet werden. Ihre bisherige E-Mail-Adresse bleibt aktiv.');}
             update_user_meta($uid,'bpm_email_requested_at',time());BPM_Portal::event('account_email_requested',(int)$h->id);
         });
@@ -128,7 +128,7 @@ final class BPM_Account {
                 if(strtotime($g->first_at.' UTC')+$delay>time())continue;
                 $user=get_userdata((int)$h->user_id);if(!$user)continue;
                 // Persistent demo accounts intentionally never send real notifications.
-                $ok=str_starts_with($h->reference,'DEMO-')||wp_mail($user->user_email,'Neue Information im Mieterportal',"Im Mieterportal liegen neue Informationen für Ihre Mietpartei bereit. Bitte melden Sie sich an:\n".BPM_Portal::url()."\n\nDiese E-Mail enthält keine Nachrichtentexte, Bankdaten oder Dokumente.");
+                $ok=str_starts_with($h->reference,'DEMO-')||BPM_Portal::mail($user->user_email,'Neue Information im Mieterportal',"Im Mieterportal liegen neue Informationen für Ihre Mietpartei bereit. Bitte melden Sie sich an:\n".BPM_Portal::url()."\n\nDiese E-Mail enthält keine Nachrichtentexte, Bankdaten oder Dokumente.");
                 if($ok){$wpdb->query($wpdb->prepare('DELETE FROM '.BPM_Portal::table('notification_queue').' WHERE household_id=%d AND id<=%d',$h->id,$g->max_id));BPM_Portal::event('account_digest_sent',(int)$h->id);}else BPM_Portal::event('mail_failed',(int)$h->id);
             }
         }finally{if(get_option($key)===$lock)delete_option($key);}

@@ -27,22 +27,17 @@ final class BPM_Tickets {
         }, 1, 3);
         add_filter('wpsc_load_frontend_scripts', static fn($load) => is_page((int)get_option('bpm_page_id')) && (BPM_Portal::manager() || (BPM_Portal::can_access(BPM_Portal::household()) && self::enabled(BPM_Portal::household()))));
         add_action('wpsc_create_new_ticket', [self::class, 'link_ticket'], 20);
+        // Filter before SupportCandy validates recipients. Clearing them in
+        // wpsc_en_before_sending is too late and queues recipientless mail.
+        add_filter('wpsc_en_to_addresses', [self::class, 'notification_recipients'], 20, 2);
+        add_filter('wpsc_en_cc_addresses', '__return_empty_array', 20);
+        add_filter('wpsc_en_bcc_addresses', '__return_empty_array', 20);
         add_filter('wpsc_en_before_sending', static function ($en) {
             $en->subject = 'Neue Information im Mieterportal';
             $en->body = '<p>Im Mieterportal liegt eine neue Information zu einem Ticket bereit.</p><p><a href="'.esc_url(BPM_Portal::url()).'">Mieterportal öffnen</a></p>';
+            if (get_option('bpm_noreply_notice', false)) { $en->body .= '<p>Bitte antworten Sie nicht auf diese automatisch versandte E-Mail. Nutzen Sie für Ihr Anliegen das Mieterportal.</p>'; }
             $en->attachments = [];
             $en->cc = []; $en->bcc = [];
-            $uid=self::owner_id($en->ticket);
-            $h=$uid ? BPM_Portal::household($uid) : null;
-            if ($h && str_starts_with($h->reference,'DEMO-')) { $en->to=[]; }
-            elseif ($h && !BPM_Portal::can_access($h)) { $email=get_userdata($uid)->user_email; $en->to=array_values(array_filter($en->to,static fn($to)=>strcasecmp($to,$email)!==0)); }
-            if ($h && BPM_Portal::can_access($h) && BPM_Account::frequency($uid)!=='immediate') {
-                $email=get_userdata($uid)->user_email;
-                if (in_array($email,$en->to,true)) {
-                    BPM_Account::notify((int)$h->id);
-                    $en->to=array_values(array_filter($en->to,static fn($to)=>strcasecmp($to,$email)!==0));
-                }
-            }
             return $en;
         });
         add_filter('wpsc_restricted_ticket_action', static function ($restricted, $ticket) {
@@ -56,6 +51,23 @@ final class BPM_Tickets {
             add_action('load-'.$hook, static function () { wp_safe_redirect(admin_url('admin.php?page=wpsc-tickets')); exit; });
         }, 20);
         add_filter('body_class', static function ($classes) { if (is_page((int)get_option('bpm_page_id'))) { $classes[]='bpm-portal-page'; } return $classes; });
+    }
+    public static function notification_recipients(array $to, object $en): array {
+        $to=array_values(array_filter($to,static fn($email)=>is_string($email)&&is_email($email)));
+        $uid=self::owner_id($en->ticket);
+        $h=$uid ? BPM_Portal::household($uid) : null;
+        if (!$h) { return $to; }
+        if (str_starts_with($h->reference,'DEMO-')) { return []; }
+        $user=get_userdata($uid);
+        if (!$user) { return []; }
+        $email=$user->user_email;
+        $tenant_receives=(bool)array_filter($to,static fn($recipient)=>strcasecmp($recipient,$email)===0);
+        $active=BPM_Portal::can_access($h);
+        if (!$active || BPM_Account::frequency($uid)!=='immediate') {
+            if ($active && $tenant_receives) { BPM_Account::notify((int)$h->id); }
+            $to=array_values(array_filter($to,static fn($recipient)=>strcasecmp($recipient,$email)!==0));
+        }
+        return $to;
     }
     public static function guard(): void {
         $action = sanitize_key($_REQUEST['action'] ?? '');

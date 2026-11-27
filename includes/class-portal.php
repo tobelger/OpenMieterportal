@@ -235,9 +235,16 @@ final class BPM_Portal {
         $key = get_password_reset_key($user);
         if (is_wp_error($key)) { return false; }
         $url = network_site_url('wp-login.php?action=rp&key=' . rawurlencode($key) . '&login=' . rawurlencode($user->user_login), 'login');
-        $ok = wp_mail($user->user_email, 'Mieterportal: E-Mail bestätigen und Passwort festlegen', "Bitte legen Sie über diesen Link das Passwort für den gemeinsamen Zugang Ihrer Mietpartei fest:\n\n$url\n\nDanach erreichen Sie das Portal unter:\n" . self::url() . "\n\nWenn Sie diese Registrierung nicht veranlasst haben, verwenden Sie den Link nicht und kontaktieren Sie die Verwaltung.");
+        $ok = self::mail($user->user_email, 'Mieterportal: E-Mail bestätigen und Passwort festlegen', "Bitte legen Sie über diesen Link das Passwort für den gemeinsamen Zugang Ihrer Mietpartei fest:\n\n$url\n\nDanach erreichen Sie das Portal unter:\n" . self::url() . "\n\nWenn Sie diese Registrierung nicht veranlasst haben, verwenden Sie den Link nicht und kontaktieren Sie die Verwaltung.");
         self::event($ok ? 'activation_mail_sent' : 'mail_failed', (int) (self::household($user_id)->id ?? 0));
         return $ok;
+    }
+    /** SMTP credentials and sender are configured in the site's standard mail plugin. */
+    public static function mail($to, string $subject, string $message): bool {
+        if (get_option('bpm_noreply_notice', false)) {
+            $message .= "\n\nBitte antworten Sie nicht auf diese automatisch versandte E-Mail. Nutzen Sie für Ihr Anliegen das Mieterportal:\n" . self::url();
+        }
+        return wp_mail($to, $subject, $message);
     }
     public static function notify(int $household_id, bool $to_tenant): void {
         if ($to_tenant) { BPM_Account::notify($household_id); return; }
@@ -245,7 +252,7 @@ final class BPM_Portal {
         $household = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . self::table('households') . ' WHERE id=%d', $household_id));
         $user = $household && $household->user_id ? get_userdata((int) $household->user_id) : null;
         $email = $to_tenant ? ($user->user_email ?? '') : get_option('admin_email');
-        if ($email && !wp_mail($email, 'Neue Information im Mieterportal', "Im Mieterportal liegt eine neue Information bereit. Bitte melden Sie sich an:\n" . self::url() . "\n\nDiese E-Mail enthält aus Datenschutzgründen keine Nachrichtentexte oder Dokumente.")) {
+        if ($email && !self::mail($email, 'Neue Information im Mieterportal', "Im Mieterportal liegt eine neue Information bereit. Bitte melden Sie sich an:\n" . self::url() . "\n\nDiese E-Mail enthält aus Datenschutzgründen keine Nachrichtentexte oder Dokumente.")) {
             self::event('mail_failed', $household_id);
         }
     }

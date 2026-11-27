@@ -25,7 +25,7 @@ class BPM_Account{
 class WPSC_Translations{static function get($key,$default){return $default;}}
 class WPSC_Macros{static function replace($body,...$args){return $body;}}
 class WPSC_Ticket_Conditions{static function is_valid(...$args){return true;}}
-require $argv[2] ?? dirname(__DIR__).'/belger-mieterportal/includes/class-tickets.php';
+require $argv[2] ?? dirname(__DIR__).'/includes/class-tickets.php';
 require $argv[1];
 BPM_Tickets::boot();
 class ProbeNotification extends WPSC_Email_Notifications{

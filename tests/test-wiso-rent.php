@@ -1,5 +1,6 @@
 <?php
-require '/tmp/belger-portal-runtime/wordpress/wp-load.php';
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit; }
+require getenv('BPM_TEST_WP_LOAD') ?: '/tmp/belger-portal-runtime/wordpress/wp-load.php';
 if (!str_starts_with(home_url(), 'http://127.0.0.1:') || !class_exists(BPM_Rent_Terms::class)) {
     throw new RuntimeException('Isolierte WordPress-Testinstallation erforderlich.');
 }
@@ -48,7 +49,7 @@ try {
     rent_check(!isset(BPM_Portal::current_rent($b)->operating_cents), 'Other contract retains legacy terms');
     $h = (object) ['id' => $a];
     ob_start();
-    require __DIR__ . '/../belger-mieterportal/includes/view-rent-tenant.php';
+    require __DIR__ . '/../includes/view-rent-tenant.php';
     $html = ob_get_clean();
     rent_check(str_contains($html, 'Betriebskostenvorauszahlung (BKV)') && str_contains($html, 'Heizkostenvorauszahlung (HK)'), 'Tenant sees both advances');
     rent_check(str_contains($html, 'Garagenmiete') && str_contains($html, '1.257,50 €'), 'Tenant sees garage and same total as WISO');

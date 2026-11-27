@@ -1,4 +1,5 @@
 <?php
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit; }
 $root='/tmp/bpm-encryption-'.bin2hex(random_bytes(6));mkdir($root,0700);mkdir($root.'/files',0700);
 define('BPM_KEY_FILE',$root.'/keys.json');define('BPM_PRIVATE_DIR',$root.'/files');
 $id=bin2hex(random_bytes(8));file_put_contents(BPM_KEY_FILE,json_encode(['active'=>$id,'keys'=>[$id=>base64_encode(random_bytes(32))]]));chmod(BPM_KEY_FILE,0600);

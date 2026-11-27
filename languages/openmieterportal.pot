@@ -1,0 +1,2508 @@
+# Copyright (C) 2026 Belger Immobilienverwaltung
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenMieterportal 0.10.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/OpenMieterportal\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-27T09:22:29+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: openmieterportal\n"
+
+#. Plugin Name of the plugin
+#: belger-mieterportal.php
+msgid "OpenMieterportal"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: belger-mieterportal.php
+msgid "https://github.com/tobelger/OpenMieterportal"
+msgstr ""
+
+#. Description of the plugin
+#: belger-mieterportal.php
+msgid "Ein Zugang je Mietpartei: Einladungen, Dokumente, Nachrichten und Zählerstandsmeldungen."
+msgstr ""
+
+#. Author of the plugin
+#: belger-mieterportal.php
+msgid "Belger Immobilienverwaltung"
+msgstr ""
+
+#: includes/class-account.php:12
+#: includes/class-admin.php:32
+#: includes/class-admin.php:161
+#: includes/class-admin.php:226
+#: includes/class-meters.php:11
+#: includes/class-portal.php:430
+#: includes/class-portal.php:597
+#: includes/class-settings.php:26
+#: includes/class-tickets.php:34
+#: includes/class-units-admin.php:26
+#: includes/class-units-admin.php:103
+#: includes/view-meter-points-admin.php:4
+msgid "Keine Berechtigung."
+msgstr ""
+
+#: includes/class-account.php:27
+msgid "{const p=new URLSearchParams(location.hash.slice(1));const t=p.get(\"email-bestaetigen\");if(t&&/^[a-f0-9]{64}$/.test(t)){sessionStorage.setItem(\"bpmEmailConfirmation\",t);history.replaceState(null,\"\",location.pathname+location.search);}})();"
+msgstr ""
+
+#: includes/class-account.php:49
+msgid "Profildaten konnten nicht geschützt gespeichert werden."
+msgstr ""
+
+#: includes/class-account.php:60
+msgid "Profildaten sind nicht lesbar."
+msgstr ""
+
+#: includes/class-account.php:65
+msgid "Profildaten sind nicht lesbar. Bitte wenden Sie sich an die Verwaltung."
+msgstr ""
+
+#: includes/class-account.php:88
+msgid "Bitte eine gültige IBAN eingeben."
+msgstr ""
+
+#: includes/class-account.php:99
+msgid "Die Prüfziffer der IBAN stimmt nicht."
+msgstr ""
+
+#: includes/class-account.php:109
+msgid "Eine Profilangabe ist zu lang."
+msgstr ""
+
+#: includes/class-account.php:113
+msgid "Bitte Anschrift und Kontoinhaber ausfüllen."
+msgstr ""
+
+#: includes/class-account.php:118
+msgid "Bitte eine gültige BIC eingeben oder das optionale Feld leer lassen."
+msgstr ""
+
+#: includes/class-account.php:134
+msgid "Bitte bestätigen Sie die Änderung der Bankverbindung mit Ihrem aktuellen Passwort."
+msgstr ""
+
+#: includes/class-account.php:139
+msgid "Mieterportal: Bankverbindung geändert"
+msgstr ""
+
+#: includes/class-account.php:139
+msgid "Die Bankverbindung Ihres Mieterzugangs wurde geändert. Falls Sie die Änderung nicht veranlasst haben, melden Sie sich bitte umgehend bei der Verwaltung und ändern Sie Ihr Passwort. Es werden keine Bankdaten per E-Mail versendet."
+msgstr ""
+
+#: includes/class-account.php:158
+msgid "Eine Kontoänderung läuft bereits. Bitte versuchen Sie es gleich erneut."
+msgstr ""
+
+#: includes/class-account.php:179
+msgid "Bitte eine gültige E-Mail-Adresse eingeben."
+msgstr ""
+
+#: includes/class-account.php:182
+msgid "Diese E-Mail-Adresse ist bereits bestätigt."
+msgstr ""
+
+#: includes/class-account.php:185
+msgid "Das aktuelle Passwort stimmt nicht."
+msgstr ""
+
+#: includes/class-account.php:188
+msgid "Diese E-Mail-Adresse kann nicht verwendet werden."
+msgstr ""
+
+#: includes/class-account.php:193
+msgid "Bitte warten Sie eine Minute, bevor Sie einen neuen Bestätigungslink anfordern."
+msgstr ""
+
+#: includes/class-account.php:199
+msgid "Mieterportal: Neue E-Mail-Adresse bestätigen"
+msgstr ""
+
+#: includes/class-account.php:206
+msgid "Die Bestätigungsmail konnte nicht versendet werden. Ihre bisherige E-Mail-Adresse bleibt aktiv."
+msgstr ""
+
+#: includes/class-account.php:218
+msgid "Der Bestätigungslink ist ungültig oder abgelaufen. Fordern Sie im Profil einen neuen Link an."
+msgstr ""
+
+#: includes/class-account.php:221
+msgid "Diese E-Mail-Adresse kann nicht mehr verwendet werden."
+msgstr ""
+
+#: includes/class-account.php:225
+msgid "Die E-Mail-Adresse konnte nicht geändert werden."
+msgstr ""
+
+#: includes/class-account.php:242
+msgid "Bitte eine gültige Häufigkeit auswählen."
+msgstr ""
+
+#: includes/class-account.php:251
+msgid "Der Benachrichtigungshinweis konnte nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-account.php:288
+#: includes/class-portal.php:382
+#: includes/class-tickets.php:47
+msgid "Neue Information im Mieterportal"
+msgstr ""
+
+#: includes/class-account.php:288
+msgid ""
+"Im Mieterportal liegen neue Informationen für Ihre Mietpartei bereit. Bitte melden Sie sich an:\n"
+""
+msgstr ""
+
+#: includes/class-account.php:289
+msgid ""
+"\n"
+"\n"
+"Diese E-Mail enthält keine Nachrichtentexte, Bankdaten oder Dokumente."
+msgstr ""
+
+#: includes/class-account.php:325
+msgid "Unbekannte Kontoaktion."
+msgstr ""
+
+#: includes/class-account.php:338
+msgid "Kontaktdaten und Bankverbindung"
+msgstr ""
+
+#: includes/class-account.php:338
+msgid "Von der Mietpartei gepflegte Angaben. Änderungen werden unmittelbar übernommen; eine Bankangabe erteilt kein SEPA-Lastschriftmandat."
+msgstr ""
+
+#: includes/class-account.php:339
+#: includes/class-admin.php:303
+#: includes/view-account.php:12
+msgid "Anschrift"
+msgstr ""
+
+#: includes/class-account.php:339
+#: includes/class-settings.php:48
+msgid "Telefon"
+msgstr ""
+
+#: includes/class-account.php:339
+msgid "Kontoinhaber"
+msgstr ""
+
+#: includes/class-account.php:340
+#: includes/view-portal.php:119
+msgid "Noch nicht hinterlegt"
+msgstr ""
+
+#: includes/class-account.php:342
+msgid "Bestätigte E-Mail-Adresse"
+msgstr ""
+
+#: includes/class-admin.php:10
+#: includes/class-admin.php:11
+#: includes/class-portal.php:204
+#: includes/class-portal.php:513
+#: includes/view-portal.php:55
+msgid "Mieterportal"
+msgstr ""
+
+#: includes/class-admin.php:11
+msgid "Übersicht"
+msgstr ""
+
+#: includes/class-admin.php:24
+#: includes/class-rent-terms.php:73
+msgid "Die Mietpartei wurde nicht gefunden."
+msgstr ""
+
+#: includes/class-admin.php:48
+msgid "Bitte ein Gebäude auswählen."
+msgstr ""
+
+#: includes/class-admin.php:55
+msgid "Bitte eine gültige E-Mail-Adresse angeben."
+msgstr ""
+
+#: includes/class-admin.php:75
+msgid "Ein Wohnungswechsel benötigt ein neues Mietverhältnis."
+msgstr ""
+
+#: includes/class-admin.php:80
+msgid "Die Profildaten konnten nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-admin.php:89
+msgid "Die Aktivierungsmail konnte nicht versendet werden. Bitte E-Mail-Konfiguration prüfen."
+msgstr ""
+
+#: includes/class-admin.php:94
+msgid "Nur bereits aktivierte Zugänge können hier gesperrt oder wieder freigegeben werden."
+msgstr ""
+
+#: includes/class-admin.php:97
+msgid "Die Zugangsfrist ist abgelaufen. Bitte zuerst das Mietende prüfen; eine Verlängerung über 25 Monate hinaus ist nicht möglich."
+msgstr ""
+
+#: includes/class-admin.php:108
+msgid "Bitte eine Dokumentkategorie auswählen."
+msgstr ""
+
+#: includes/class-admin.php:124
+msgid "Die Wohnung stimmt nicht mit dem Mietverhältnis überein."
+msgstr ""
+
+#: includes/class-admin.php:131
+msgid "Bitte in der Ticketverwaltung antworten."
+msgstr ""
+
+#: includes/class-admin.php:136
+msgid "Ungültiger Status."
+msgstr ""
+
+#: includes/class-admin.php:148
+msgid "Ungültiger Prüfstatus."
+msgstr ""
+
+#: includes/class-admin.php:168
+msgid "Bitte eine gültige Quelle auswählen."
+msgstr ""
+
+#: includes/class-admin.php:172
+msgid "Für diesen Zähler und Ablesetag ist bereits ein Stand vorhanden. Bitte den vorhandenen Eintrag prüfen."
+msgstr ""
+
+#: includes/class-admin.php:183
+msgid "Das Portal befindet sich in Vorbereitung. Einladungen sind erst nach Veröffentlichung der geprüften Portalseite möglich."
+msgstr ""
+
+#: includes/class-admin.php:186
+msgid "Diese Mietpartei hat bereits einen Zugang. Ein weiterer Zugang wird nicht erstellt."
+msgstr ""
+
+#: includes/class-admin.php:191
+msgid "Für diese Mietpartei läuft bereits eine Registrierung. Bitte den Vorgang prüfen."
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Einladung ins Mieterportal"
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "\" alt=\""
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Ihr Zugang zum Mieterportal"
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Guten Tag,"
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "mit Ihrem gemeinsamen Mieterzugang können Sie Unterlagen abrufen, Nachrichten an die Verwaltung senden und Zählerstände melden."
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "So aktivieren Sie Ihren Zugang"
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Scannen Sie den QR-Code oder öffnen Sie die unten genannte Adresse."
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Geben Sie den Einladungscode und die gemeinsame Kontakt-E-Mail-Adresse Ihrer Mietpartei ein."
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Öffnen Sie unsere Bestätigungs-E-Mail und legen Sie Ihr Passwort fest."
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "\" aria-label=\""
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "QR-Code zur einmaligen Aktivierung"
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Einmalig verwendbar bis"
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Uhr. Ein neuer Einladungsbrief ersetzt frühere ungenutzte Codes."
+msgstr ""
+
+#: includes/class-admin.php:209
+msgid "Bitte verwenden Sie die bereits mit der Verwaltung vereinbarte E-Mail-Adresse."
+msgstr ""
+
+#: includes/class-admin.php:210
+msgid "Für Ihren Vertrag gibt es einen gemeinsamen Zugang. Stimmen Sie die Nutzung innerhalb Ihrer Mietpartei ab und bewahren Sie den Brief vertraulich auf."
+msgstr ""
+
+#: includes/class-admin.php:210
+msgid "Die elektronische Zustellung vereinbaren Sie anschließend gesondert im Portal. Allein durch die Aktivierung ändern sich Ihre bisherigen Kommunikationswege nicht."
+msgstr ""
+
+#: includes/class-admin.php:210
+msgid "Freundliche Grüße"
+msgstr ""
+
+#: includes/class-admin.php:210
+msgid "Brief drucken / als PDF speichern"
+msgstr ""
+
+#: includes/class-admin.php:210
+msgid "Zurück zur Verwaltung"
+msgstr ""
+
+#: includes/class-admin.php:210
+msgid "Der Code wird nicht im Klartext gespeichert. Drucken oder speichern Sie diesen Brief jetzt sicher. Die Empfängeranschrift vor dem Versand bitte prüfen und gegebenenfalls ergänzen."
+msgstr ""
+
+#: includes/class-admin.php:217
+#: includes/class-units-admin.php:143
+msgid "Wohnung"
+msgstr ""
+
+#: includes/class-admin.php:217
+#: includes/class-admin.php:304
+#: includes/class-admin.php:359
+msgid "Bitte auswählen"
+msgstr ""
+
+#: includes/class-admin.php:234
+msgid "Noch nicht registriert"
+msgstr ""
+
+#: includes/class-admin.php:234
+msgid "E-Mail-Bestätigung offen"
+msgstr ""
+
+#: includes/class-admin.php:234
+msgid "Aktiv"
+msgstr ""
+
+#: includes/class-admin.php:234
+msgid "Gesperrt"
+msgstr ""
+
+#: includes/class-admin.php:234
+msgid "Abgelaufen"
+msgstr ""
+
+#: includes/class-admin.php:284
+msgid "Mieterportal verwalten"
+msgstr ""
+
+#: includes/class-admin.php:284
+msgid "Ein Zugang je Mietpartei · Vorbereitete Pilotversion"
+msgstr ""
+
+#: includes/class-admin.php:286
+msgid "Das Portal ist noch privat und nur für die Verwaltung sichtbar. Einladungen bleiben gesperrt. Vor Veröffentlichung müssen die Testkopie, der Dateispeicher und der E-Mail-Versand geprüft sein."
+msgstr ""
+
+#: includes/class-admin.php:289
+#: includes/class-units-admin.php:108
+msgid "Die Angaben wurden gespeichert."
+msgstr ""
+
+#: includes/class-admin.php:292
+msgid "Der geschützte Dateispeicher ist noch nicht eingerichtet. Dokumentuploads und Fotouploads bleiben gesperrt, bis ein schreibbares Verzeichnis außerhalb des öffentlichen Webverzeichnisses über BPM_PRIVATE_DIR eingerichtet ist."
+msgstr ""
+
+#: includes/class-admin.php:295
+msgid "fehlgeschlagene E-Mail-Versandvorgänge wurden protokolliert. Bitte Zustellung prüfen; ein erfolgreicher Versandaufruf bestätigt noch keinen Eingang beim Empfänger."
+msgstr ""
+
+#: includes/class-admin.php:297
+msgid "Gebäude und Wohnungen"
+msgstr ""
+
+#: includes/class-admin.php:297
+msgid "Wohnungen und Zähler bleiben bestehen. Für jeden Mieterwechsel wird ein neues Mietverhältnis mit eigenem Zugang angelegt."
+msgstr ""
+
+#: includes/class-admin.php:300
+msgid "Wohnung und Zähler bearbeiten"
+msgstr ""
+
+#: includes/class-admin.php:300
+#: includes/class-units-admin.php:123
+msgid "Mietverhältnisse dieser Wohnung anzeigen"
+msgstr ""
+
+#: includes/class-admin.php:303
+msgid "Gebäude anlegen"
+msgstr ""
+
+#: includes/class-admin.php:303
+msgid "Gebäudenummer"
+msgstr ""
+
+#: includes/class-admin.php:303
+msgid "Gebäudebezeichnung"
+msgstr ""
+
+#: includes/class-admin.php:303
+msgid "Gebäude speichern"
+msgstr ""
+
+#: includes/class-admin.php:304
+msgid "Wohnung anlegen"
+msgstr ""
+
+#: includes/class-admin.php:304
+#: includes/class-units-admin.php:135
+#: includes/class-units-admin.php:143
+msgid "Gebäude"
+msgstr ""
+
+#: includes/class-admin.php:306
+#: includes/class-units-admin.php:125
+#: includes/class-units-admin.php:143
+msgid "Wohnungsnummer"
+msgstr ""
+
+#: includes/class-admin.php:306
+#: includes/class-units-admin.php:125
+msgid "Wohnungsbezeichnung"
+msgstr ""
+
+#: includes/class-admin.php:306
+#: includes/class-units-admin.php:125
+msgid "Wohnung speichern"
+msgstr ""
+
+#: includes/class-admin.php:307
+msgid "Mietparteien"
+msgstr ""
+
+#: includes/class-admin.php:307
+msgid "Wählen Sie die Mietpartei, für die Sie Dokumente oder Nachrichten bereitstellen möchten."
+msgstr ""
+
+#: includes/class-admin.php:311
+msgid "Freitextsuche"
+msgstr ""
+
+#: includes/class-admin.php:311
+msgid "\" placeholder=\""
+msgstr ""
+
+#: includes/class-admin.php:311
+msgid "Name, Vertragsnummer, Wohnung oder Anschrift"
+msgstr ""
+
+#: includes/class-admin.php:312
+msgid "Gebäude filtern"
+msgstr ""
+
+#: includes/class-admin.php:312
+#: includes/class-units-admin.php:135
+msgid "Alle Gebäude"
+msgstr ""
+
+#: includes/class-admin.php:315
+msgid "Wohnung filtern"
+msgstr ""
+
+#: includes/class-admin.php:315
+msgid "Alle Wohnungen"
+msgstr ""
+
+#: includes/class-admin.php:318
+msgid "Zugangsstatus filtern"
+msgstr ""
+
+#: includes/class-admin.php:318
+msgid "Alle Zugangsstatus"
+msgstr ""
+
+#: includes/class-admin.php:320
+msgid "Mietparteien filtern"
+msgstr ""
+
+#: includes/class-admin.php:320
+msgid "Filter zurücksetzen"
+msgstr ""
+
+#: includes/class-admin.php:321
+msgid " Mietparteien"
+msgstr ""
+
+#: includes/class-admin.php:321
+msgid "Keine Mietparteien für diese Filter gefunden."
+msgstr ""
+
+#: includes/class-admin.php:325
+msgid "Mietparteien blättern"
+msgstr ""
+
+#: includes/class-admin.php:326
+msgid "Zurück"
+msgstr ""
+
+#: includes/class-admin.php:327
+msgid "Seite"
+msgstr ""
+
+#: includes/class-admin.php:327
+msgid "von"
+msgstr ""
+
+#: includes/class-admin.php:328
+msgid "Weiter"
+msgstr ""
+
+#: includes/class-admin.php:331
+msgid "Mietpartei anlegen"
+msgstr ""
+
+#: includes/class-admin.php:331
+msgid "Eindeutige Vertrags-/Mietparteiennummer"
+msgstr ""
+
+#: includes/class-admin.php:331
+msgid "Bezeichnung der Mietpartei"
+msgstr ""
+
+#: includes/class-admin.php:331
+msgid "Vereinbarte Kontakt-E-Mail (optional)"
+msgstr ""
+
+#: includes/class-admin.php:331
+msgid "Wenn hinterlegt, kann nur diese E-Mail-Adresse die Einladung einlösen. Ohne Vorgabe legitimiert der vertrauliche Brief die erstmalige Registrierung."
+msgstr ""
+
+#: includes/class-admin.php:334
+msgid "Zugang:"
+msgstr ""
+
+#: includes/class-admin.php:336
+msgid "Einladungsbrief mit QR-Code erstellen"
+msgstr ""
+
+#: includes/class-admin.php:336
+msgid "30 Tage gültig. Frühere ungenutzte Einladungen werden ungültig."
+msgstr ""
+
+#: includes/class-admin.php:338
+msgid "Aktivierungsmail erneut senden"
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid "Ein Zugang ist zugeordnet. Es wird kein weiterer Zugang für diesen Vertrag erstellt."
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid "Zugang wieder freigeben"
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid "Mieterzugang sperren"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Mieterprofil und Kündigung"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Die Angaben werden der Mietpartei im Profil angezeigt. Das Erfassen einer Kündigung versendet keine Erklärung."
+msgstr ""
+
+#: includes/class-admin.php:345
+#: includes/class-admin.php:372
+#: includes/class-portal.php:198
+#: includes/view-portal.php:119
+msgid "Mietpartei"
+msgstr ""
+
+#: includes/class-admin.php:346
+msgid "Bei einem Mieterwechsel ein neues Mietverhältnis mit dieser Wohnung anlegen. Der bisherige Vertrag und seine Unterlagen bleiben erhalten."
+msgstr ""
+
+#: includes/class-admin.php:347
+#: includes/view-portal.php:119
+msgid "Mietbeginn"
+msgstr ""
+
+#: includes/class-admin.php:347
+#: includes/view-portal.php:119
+msgid "Mietende"
+msgstr ""
+
+#: includes/class-admin.php:348
+msgid "Kündigung / Vereinbarung eingegangen am"
+msgstr ""
+
+#: includes/class-admin.php:349
+msgid "Beendigungsart"
+msgstr ""
+
+#: includes/class-admin.php:349
+msgid "Keine Kündigung erfasst"
+msgstr ""
+
+#: includes/class-admin.php:349
+msgid "Kündigung durch Mietpartei"
+msgstr ""
+
+#: includes/class-admin.php:349
+msgid "Aufhebungsvereinbarung"
+msgstr ""
+
+#: includes/class-admin.php:352
+msgid "Portalzugang längstens bis:"
+msgstr ""
+
+#: includes/class-admin.php:352
+msgid "Noch kein Mietende hinterlegt"
+msgstr ""
+
+#: includes/class-admin.php:352
+msgid "25 Kalendermonate nach Mietende. Danach werden auch bestehende Sitzungen gesperrt. Eine frühere manuelle Sperre bleibt möglich. Dokumente werden durch die Zugangssperre nicht gelöscht."
+msgstr ""
+
+#: includes/class-admin.php:352
+msgid "Profil und Kündigung speichern"
+msgstr ""
+
+#: includes/class-admin.php:354
+msgid "Dokument bereitstellen"
+msgstr ""
+
+#: includes/class-admin.php:354
+msgid "Wählen Sie eine PDF-Datei aus und stellen Sie diese der ausgewählten Mietpartei bereit. Bereitgestellte PDFs werden nicht überschrieben; Korrekturen stellen Sie als neues Dokument mit einem eindeutigen Titel bereit. Vor jedem Abruf werden Dateigröße und SHA-256-Prüfsumme geprüft. Unter jedem bereitgestellten Dokument sehen Sie „Durch Mietpartei abgerufen“ mit Datum, Uhrzeit und Konto-ID oder „Noch nicht durch die Mietpartei abgerufen“. Verwaltungsabrufe zählen nicht."
+msgstr ""
+
+#: includes/class-admin.php:354
+#: includes/view-portal.php:63
+msgid "Titel"
+msgstr ""
+
+#: includes/class-admin.php:354
+msgid "Kategorie"
+msgstr ""
+
+#: includes/class-admin.php:354
+#: includes/class-portal.php:22
+msgid "Vertrag"
+msgstr ""
+
+#: includes/class-admin.php:354
+#: includes/class-portal.php:22
+msgid "Abrechnung"
+msgstr ""
+
+#: includes/class-admin.php:354
+#: includes/class-portal.php:22
+msgid "Mitteilung"
+msgstr ""
+
+#: includes/class-admin.php:354
+#: includes/class-portal.php:22
+msgid "Sonstiges"
+msgstr ""
+
+#: includes/class-admin.php:354
+msgid "PDF-Datei (maximal 15 MB)"
+msgstr ""
+
+#: includes/class-admin.php:354
+msgid "Empfänger: ausschließlich"
+msgstr ""
+
+#: includes/class-admin.php:354
+msgid "und berechtigte Verwalter."
+msgstr ""
+
+#: includes/class-admin.php:354
+msgid "PDF bereitstellen"
+msgstr ""
+
+#: includes/class-admin.php:356
+msgid "Durch Mietpartei abgerufen: "
+msgstr ""
+
+#: includes/class-admin.php:356
+msgid "Noch nicht durch die Mietpartei abgerufen"
+msgstr ""
+
+#: includes/class-admin.php:356
+msgid "PDF prüfen"
+msgstr ""
+
+#: includes/class-admin.php:358
+msgid "Messstellen und Zählergeräte der Wohnung"
+msgstr ""
+
+#: includes/class-admin.php:358
+msgid "Messstellen, Geräte und Gültigkeitszeiträume verwalten Sie direkt an der Wohnung."
+msgstr ""
+
+#: includes/class-admin.php:358
+msgid "Messstellen und Geräte bearbeiten"
+msgstr ""
+
+#: includes/class-admin.php:359
+msgid "Zählerstand eintragen"
+msgstr ""
+
+#: includes/class-admin.php:359
+msgid "Für Ablesungen der Verwaltung oder eines Messdienstes. Datum und Quelle werden gespeichert; der Stand bleibt dem Wohnungszähler zugeordnet."
+msgstr ""
+
+#: includes/class-admin.php:359
+#: includes/class-units-admin.php:128
+#: includes/view-portal.php:99
+msgid "Zähler"
+msgstr ""
+
+#: includes/class-admin.php:361
+msgid "Ablesedatum"
+msgstr ""
+
+#: includes/class-admin.php:361
+msgid "Zählerstand (ohne Tausenderpunkte)"
+msgstr ""
+
+#: includes/class-admin.php:361
+#: includes/view-meter-points-admin.php:42
+msgid "z. B. 1234,567"
+msgstr ""
+
+#: includes/class-admin.php:361
+msgid "Quelle"
+msgstr ""
+
+#: includes/class-admin.php:361
+msgid "Eigene Ablesung / Verwaltung"
+msgstr ""
+
+#: includes/class-admin.php:361
+msgid "ista"
+msgstr ""
+
+#: includes/class-admin.php:361
+msgid "Anderer Messdienst"
+msgstr ""
+
+#: includes/class-admin.php:361
+msgid "Verwaltungseinträge werden als bestätigt gespeichert. Es erfolgt keine automatische Übernahme in WISO."
+msgstr ""
+
+#: includes/class-admin.php:361
+msgid "Zählerstand speichern"
+msgstr ""
+
+#: includes/class-admin.php:362
+msgid "Zählerstandsmeldungen prüfen"
+msgstr ""
+
+#: includes/class-admin.php:364
+msgid "Zählerfoto herunterladen"
+msgstr ""
+
+#: includes/class-admin.php:365
+msgid "Prüfung"
+msgstr ""
+
+#: includes/class-admin.php:365
+msgid "Bestätigt"
+msgstr ""
+
+#: includes/class-admin.php:365
+#: includes/view-portal.php:111
+msgid "Rückfrage erforderlich"
+msgstr ""
+
+#: includes/class-admin.php:365
+msgid "Prüfstatus speichern"
+msgstr ""
+
+#: includes/class-admin.php:365
+msgid "Die Prüfung überträgt keine Daten automatisch in WISO oder eine Abrechnung."
+msgstr ""
+
+#: includes/class-admin.php:370
+msgid "Nachrichten beantworten"
+msgstr ""
+
+#: includes/class-admin.php:372
+#: includes/view-portal.php:89
+msgid "Verwaltung"
+msgstr ""
+
+#: includes/class-admin.php:373
+#: includes/view-portal.php:91
+msgid "Antwort"
+msgstr ""
+
+#: includes/class-admin.php:373
+#: includes/view-meter-points-admin.php:23
+msgid "Status"
+msgstr ""
+
+#: includes/class-admin.php:373
+msgid "In Bearbeitung"
+msgstr ""
+
+#: includes/class-admin.php:373
+#: includes/view-meter-points-admin.php:27
+msgid "Offen"
+msgstr ""
+
+#: includes/class-admin.php:373
+msgid "Erledigt"
+msgstr ""
+
+#: includes/class-admin.php:373
+#: includes/view-portal.php:91
+msgid "Antwort senden"
+msgstr ""
+
+#: includes/class-admin.php:376
+msgid "Dokumentierte Kommunikationswahl"
+msgstr ""
+
+#: includes/class-admin.php:377
+msgid "Noch keine Erklärung abgegeben."
+msgstr ""
+
+#: includes/class-admin.php:379
+msgid "Vertretungsberechtigung bestätigt:"
+msgstr ""
+
+#: includes/class-admin.php:379
+msgid "Ja"
+msgstr ""
+
+#: includes/class-admin.php:382
+msgid "Freigabe der Kommunikationsvereinbarung"
+msgstr ""
+
+#: includes/class-admin.php:382
+msgid "Die Textfassung ist ein Entwurf. Vor einer Freigabe müssen Wortlaut, Vertretung der Mietpartei, Zustellung und alternative Kommunikationswege rechtlich und organisatorisch abgestimmt sein."
+msgstr ""
+
+#: includes/class-admin.php:382
+msgid "Entwurf lesen"
+msgstr ""
+
+#: includes/class-admin.php:382
+msgid "Fassung:"
+msgstr ""
+
+#: includes/class-admin.php:382
+msgid "Der Text und die Abläufe sind abgestimmt. Die freiwillige Wahl darf im Portal angeboten werden."
+msgstr ""
+
+#: includes/class-admin.php:382
+msgid "Freigabe speichern"
+msgstr ""
+
+#: includes/class-crypto.php:15
+msgid "Der separate Verschlüsselungsschlüssel ist nicht eingerichtet."
+msgstr ""
+
+#: includes/class-crypto.php:19
+msgid "Der Verschlüsselungsschlüssel ist nicht verfügbar."
+msgstr ""
+
+#: includes/class-crypto.php:25
+msgid "Die Schlüsseldatei muss außerhalb der öffentlichen Webverzeichnisse liegen."
+msgstr ""
+
+#: includes/class-crypto.php:29
+msgid "Die Schlüsseldatei darf nur für ihren Eigentümer lesbar sein."
+msgstr ""
+
+#: includes/class-crypto.php:34
+#: includes/class-crypto.php:38
+msgid "Die Schlüsseldatei ist ungültig."
+msgstr ""
+
+#: includes/class-crypto.php:59
+msgid "Die Verschlüsselung ist fehlgeschlagen."
+msgstr ""
+
+#: includes/class-crypto.php:66
+msgid "Ein verschlüsselter Datensatz wurde erwartet."
+msgstr ""
+
+#: includes/class-crypto.php:73
+msgid "Der benötigte Datenschlüssel ist nicht verfügbar."
+msgstr ""
+
+#: includes/class-crypto.php:79
+msgid "Der verschlüsselte Datensatz ist ungültig."
+msgstr ""
+
+#: includes/class-crypto.php:83
+msgid "Die Echtheitsprüfung der verschlüsselten Daten ist fehlgeschlagen."
+msgstr ""
+
+#: includes/class-data.php:63
+msgid "Ein unverschlüsselter Datensatz wurde blockiert."
+msgstr ""
+
+#: includes/class-data.php:137
+msgid "Die geschützten Daten konnten nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-data.php:157
+msgid "Ungültiges Datenfeld."
+msgstr ""
+
+#: includes/class-data.php:168
+msgid "Eine gezielte Zuordnung ist erforderlich."
+msgstr ""
+
+#: includes/class-data.php:197
+msgid "Die Sicherheitsmigration konnte nicht vorbereitet werden."
+msgstr ""
+
+#: includes/class-data.php:215
+msgid "Die Sicherheitsmigration wurde angehalten."
+msgstr ""
+
+#: includes/class-data.php:219
+msgid "Die Sicherheitsprüfung der Migration ist fehlgeschlagen."
+msgstr ""
+
+#: includes/class-domain.php:14
+msgid "Bitte einen positiven Eurobetrag mit höchstens zwei Nachkommastellen angeben (z. B. 750,00)."
+msgstr ""
+
+#: includes/class-domain.php:26
+msgid "Bitte ein gültiges Datum angeben."
+msgstr ""
+
+#: includes/class-domain.php:49
+msgid "Bitte eine gültige Beendigungsart auswählen."
+msgstr ""
+
+#: includes/class-domain.php:52
+msgid "Das Mietende darf nicht vor dem Mietbeginn liegen."
+msgstr ""
+
+#: includes/class-domain.php:55
+msgid "Für eine Kündigung bitte Eingangsdatum, Beendigungsart und Mietende angeben."
+msgstr ""
+
+#: includes/class-domain.php:91
+msgid "Bitte einen positiven Zählerstand mit höchstens drei Nachkommastellen eingeben."
+msgstr ""
+
+#: includes/class-domain.php:105
+msgid "Bitte ein gültiges tatsächliches Ablesedatum angeben, das nicht in der Zukunft liegt."
+msgstr ""
+
+#: includes/class-meters.php:19
+msgid "Diese Messstelle gehört nicht zur Wohnung."
+msgstr ""
+
+#: includes/class-meters.php:53
+#: includes/class-meters.php:57
+msgid "Die Messstellen konnten nicht übernommen werden."
+msgstr ""
+
+#: includes/class-meters.php:61
+msgid "Die Datenprüfung der Messstellen-Umstellung ist fehlgeschlagen."
+msgstr ""
+
+#: includes/class-meters.php:79
+#: includes/class-units-admin.php:33
+msgid "Bitte alle Pflichtfelder in der erlaubten Länge ausfüllen."
+msgstr ""
+
+#: includes/class-meters.php:89
+msgid "Die Messstelle konnte nicht gesperrt werden."
+msgstr ""
+
+#: includes/class-meters.php:93
+msgid "Die Angaben konnten nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-meters.php:106
+#: includes/view-meter-points-admin.php:17
+#: includes/view-meter-points-admin.php:47
+msgid "Einheiten"
+msgstr ""
+
+#: includes/class-meters.php:107
+msgid "Ungültige Einheit."
+msgstr ""
+
+#: includes/class-meters.php:124
+msgid "Die Einheit einer Messstelle mit Ablesungen darf nicht geändert werden."
+msgstr ""
+
+#: includes/class-meters.php:127
+#: includes/class-meters.php:265
+msgid "Messstelle konnte nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-meters.php:146
+msgid "Dieses Gerät gehört nicht zu dieser Messstelle."
+msgstr ""
+
+#: includes/class-meters.php:153
+msgid "Für ein neues Gerät bitte „Gültig ab“ angeben."
+msgstr ""
+
+#: includes/class-meters.php:156
+msgid "Das Gültigkeitsende liegt vor dem Beginn."
+msgstr ""
+
+#: includes/class-meters.php:159
+msgid "Diese Gerätenummer ist bereits vergeben."
+msgstr ""
+
+#: includes/class-meters.php:164
+msgid "Der Gültigkeitszeitraum muss die vorhandenen Ablesungen einschließen."
+msgstr ""
+
+#: includes/class-meters.php:170
+msgid "Die Gültigkeit überschneidet sich mit einem anderen Gerät dieser Messstelle. Bitte „Zählerwechsel erfassen“ verwenden."
+msgstr ""
+
+#: includes/class-meters.php:176
+msgid "Gerät konnte nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-meters.php:198
+msgid "Für einen künftigen Wechsel können noch keine tatsächlichen Wechselstände gespeichert werden."
+msgstr ""
+
+#: includes/class-meters.php:203
+msgid "Für den Wechseltag ist bereits ein abweichender Stand gespeichert."
+msgstr ""
+
+#: includes/class-meters.php:221
+msgid "Bitte ein Gerät ohne bereits erfasstes Gültigkeitsende auswählen."
+msgstr ""
+
+#: includes/class-meters.php:225
+msgid "Bitte ein gültiges Wechseldatum angeben."
+msgstr ""
+
+#: includes/class-meters.php:229
+msgid "Nach dem gewählten Wechseldatum bestehen bereits Ablesungen des bisherigen Geräts."
+msgstr ""
+
+#: includes/class-meters.php:232
+msgid "Der Wechsel konnte nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-meters.php:251
+msgid "Dieser Zähler gehört nicht zur Wohnung."
+msgstr ""
+
+#: includes/class-meters.php:258
+msgid "Bitte die Einheit an der Messstelle prüfen."
+msgstr ""
+
+#: includes/class-meters.php:286
+msgid "Dieses Gerät ist bereits zugeordnet oder hat Ablesungen."
+msgstr ""
+
+#: includes/class-meters.php:291
+msgid "Zuordnung fehlgeschlagen."
+msgstr ""
+
+#: includes/class-migration.php:10
+msgid "Die Migration benötigt den geschützten Wartungszugang."
+msgstr ""
+
+#: includes/class-migration.php:22
+msgid "Die Profilmigration konnte nicht geprüft werden."
+msgstr ""
+
+#: includes/class-migration.php:28
+msgid "Mietpartei "
+msgstr ""
+
+#: includes/class-migration.php:56
+msgid "Geschützter Wartungszugang erforderlich."
+msgstr ""
+
+#: includes/class-migration.php:68
+msgid "Der neue Schlüssel konnte nicht vorbereitet werden."
+msgstr ""
+
+#: includes/class-migration.php:75
+msgid "Der Schlüssel konnte nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-migration.php:89
+msgid "Der Schlüsselwechsel konnte nicht abgeschlossen werden."
+msgstr ""
+
+#: includes/class-portal.php:22
+msgid "Dokument"
+msgstr ""
+
+#: includes/class-portal.php:123
+#: includes/class-portal.php:125
+#: includes/class-portal.php:210
+#: includes/view-portal.php:32
+msgid "Verwaltungszugang"
+msgstr ""
+
+#: includes/class-portal.php:123
+msgid "Verwaltung öffnen"
+msgstr ""
+
+#: includes/class-portal.php:125
+#: includes/view-portal.php:14
+msgid "Passwort"
+msgstr ""
+
+#: includes/class-portal.php:125
+#: includes/view-portal.php:14
+msgid "Anmelden"
+msgstr ""
+
+#: includes/class-portal.php:144
+msgid "{const f=document.getElementById(\"bpm-code\");if(f){f.value=t;document.getElementById(\"bpm-activation\")?.scrollIntoView({block:\"start\"});}},{once:true});}})();"
+msgstr ""
+
+#: includes/class-portal.php:163
+msgid "Der Mieterzugang ist noch nicht aktiviert, gesperrt oder nach Ende der Zugangsfrist abgelaufen. Bitte wenden Sie sich an die Verwaltung."
+msgstr ""
+
+#: includes/class-portal.php:250
+msgid "Wohnungsübernahme fehlgeschlagen."
+msgstr ""
+
+#: includes/class-portal.php:253
+msgid "Zählerübernahme fehlgeschlagen."
+msgstr ""
+
+#: includes/class-portal.php:262
+msgid "Bitte eine vorhandene Wohnung auswählen."
+msgstr ""
+
+#: includes/class-portal.php:279
+msgid "Dieser Zähler ist für Ihre Wohnung und diesen Mietzeitraum nicht verfügbar."
+msgstr ""
+
+#. translators: 1: number of visible documents, 2: total documents.
+#: includes/class-portal.php:325
+#, php-format
+msgid "%1$d von %2$d Dokumenten"
+msgstr ""
+
+#: includes/class-portal.php:354
+msgid "Mieterportal: E-Mail bestätigen und Passwort festlegen"
+msgstr ""
+
+#: includes/class-portal.php:354
+msgid ""
+"\n"
+"\n"
+"Wenn Sie diese Registrierung nicht veranlasst haben, verwenden Sie den Link nicht und kontaktieren Sie die Verwaltung."
+msgstr ""
+
+#: includes/class-portal.php:364
+msgid ""
+"\n"
+"\n"
+"Bitte antworten Sie nicht auf diese automatisch versandte E-Mail. Nutzen Sie für Ihr Anliegen das Mieterportal:\n"
+""
+msgstr ""
+
+#: includes/class-portal.php:382
+msgid ""
+"Im Mieterportal liegt eine neue Information bereit. Bitte melden Sie sich an:\n"
+""
+msgstr ""
+
+#: includes/class-portal.php:383
+msgid ""
+"\n"
+"\n"
+"Diese E-Mail enthält aus Datenschutzgründen keine Nachrichtentexte oder Dokumente."
+msgstr ""
+
+#: includes/class-portal.php:396
+msgid "Bitte alle Pflichtfelder vollständig und in zulässiger Länge ausfüllen."
+msgstr ""
+
+#: includes/class-portal.php:416
+msgid "Diese Aktion benötigt eine Formularübermittlung."
+msgstr ""
+
+#: includes/class-portal.php:419
+msgid "Die Sitzung ist abgelaufen. Bitte laden Sie das Formular neu."
+msgstr ""
+
+#: includes/class-portal.php:423
+msgid "Das Mieterportal ist noch nicht freigeschaltet."
+msgstr ""
+
+#: includes/class-portal.php:438
+msgid "Bitte melden Sie sich mit einem aktivierten Mieterzugang an."
+msgstr ""
+
+#: includes/class-portal.php:445
+msgid "Bitte verwenden Sie die Ticketfunktion im Portal."
+msgstr ""
+
+#: includes/class-portal.php:450
+msgid "Ungültiger Nachrichtentyp."
+msgstr ""
+
+#: includes/class-portal.php:469
+msgid "Dieser Zähler ist nicht mehr aktiv."
+msgstr ""
+
+#: includes/class-portal.php:475
+msgid "Dieser Wert wurde für das angegebene Datum bereits gemeldet."
+msgstr ""
+
+#: includes/class-portal.php:495
+msgid "Bitte eine gültige Auswahl treffen."
+msgstr ""
+
+#: includes/class-portal.php:498
+msgid "Die Vereinbarung ist noch nicht freigegeben oder die erforderlichen Bestätigungen fehlen."
+msgstr ""
+
+#: includes/class-portal.php:504
+#: includes/class-units-admin.php:95
+msgid "Unbekannte Aktion."
+msgstr ""
+
+#: includes/class-portal.php:512
+msgid "Die Aktion konnte nicht abgeschlossen werden. Bitte wenden Sie sich an die Verwaltung."
+msgstr ""
+
+#: includes/class-portal.php:513
+msgid "Zurück zum Mieterportal"
+msgstr ""
+
+#: includes/class-portal.php:520
+msgid "Die Angaben konnten nicht gespeichert werden. Bitte kontaktieren Sie die Verwaltung."
+msgstr ""
+
+#: includes/class-portal.php:527
+msgid "Ungültiger Datentyp."
+msgstr ""
+
+#: includes/class-portal.php:531
+msgid "Dieser Eintrag ist nicht verfügbar."
+msgstr ""
+
+#: includes/class-portal.php:545
+msgid "Zu viele Versuche. Bitte versuchen Sie es in 15 Minuten erneut."
+msgstr ""
+
+#: includes/class-portal.php:549
+msgid "Bitte einen gültigen Einladungscode und eine gültige E-Mail-Adresse angeben."
+msgstr ""
+
+#: includes/class-portal.php:554
+msgid "Die Einladung kann mit diesen Angaben nicht verwendet werden. Bitte wenden Sie sich an die Verwaltung."
+msgstr ""
+
+#: includes/class-portal.php:559
+msgid "Die Einladung wird bereits verarbeitet oder wurde verwendet."
+msgstr ""
+
+#: includes/class-portal.php:565
+msgid "Die Einladung ist nicht mehr gültig."
+msgstr ""
+
+#: includes/class-portal.php:569
+msgid "Der Zugang konnte nicht angelegt werden. Bitte kontaktieren Sie die Verwaltung."
+msgstr ""
+
+#: includes/class-portal.php:573
+msgid "Die Zuordnung konnte nicht gespeichert werden. Bitte kontaktieren Sie die Verwaltung."
+msgstr ""
+
+#: includes/class-portal.php:586
+msgid "Bitte prüfen Sie Ihr E-Mail-Postfach. Über den Bestätigungslink legen Sie Ihr Passwort fest und aktivieren den Zugang Ihrer Mietpartei."
+msgstr ""
+
+#: includes/class-portal.php:586
+msgid "Der Zugang wurde vorbereitet, die Aktivierungsmail konnte aber nicht versendet werden. Bitte kontaktieren Sie die Verwaltung."
+msgstr ""
+
+#: includes/class-portal.php:587
+msgid "Zum Mieterportal"
+msgstr ""
+
+#: includes/class-portal.php:587
+msgid "Registrierung"
+msgstr ""
+
+#: includes/class-portal.php:604
+msgid "Der Downloadlink ist abgelaufen. Bitte laden Sie die Portalseite neu."
+msgstr ""
+
+#: includes/class-privacy.php:18
+msgid "Das Mieterportal verarbeitet Vertrags- und Kontaktdaten, Bankangaben, Mietbeträge, Dokumente, Zählerstände, Anliegen, Kommunikationsentscheidungen und Abruf-/Sicherheitsereignisse. Eine Mietpartei verwendet einen gemeinsamen Zugang. Die Verwaltung und berechtigte Mitglieder dieser Mietpartei können die jeweils zugeordneten Inhalte abrufen."
+msgstr ""
+
+#: includes/class-privacy.php:19
+msgid "Benachrichtigungen und Kontobestätigungen werden über den eingerichteten WordPress-Maildienst versendet. Dessen Anbieter erhält Empfängeradresse und Mailinhalt. QR-Codes werden lokal erzeugt. Das Portal enthält keine eigene Telemetrie und nutzt keinen externen QR-Dienst."
+msgstr ""
+
+#: includes/class-privacy.php:20
+msgid "Nach gesonderter Einrichtung und Migration werden ausgewählte eigene Datenfelder und private Portaldateien verschlüsselt gespeichert. Native WordPress-/SupportCandy-E-Mail-Adressen, Tickettexte und -anhänge sowie bestimmte Metadaten sind davon nicht vollständig erfasst. Mailprotokolle und Sicherungen benötigen eigene Zugriffskontrollen und Aufbewahrungsregeln."
+msgstr ""
+
+#: includes/class-privacy.php:21
+msgid "Der erste vollständig ausgegebene Dokumentabruf wird mit Zeitpunkt und Benutzerkonto gespeichert. Dies ist eine technische Abrufdokumentation. Eine automatische Zugriffssperre spätestens 25 Monate nach dem erfassten Mietende ist keine automatische Löschung aufbewahrungspflichtiger Unterlagen. Deaktivieren oder Entfernen des Plugins löscht die vorhandenen Datensätze und privaten Dateien nicht."
+msgstr ""
+
+#: includes/class-privacy.php:22
+msgid "Ergänzen Sie für Ihren Betrieb insbesondere Verantwortliche, konkrete Empfänger und Dienstleister, Zwecke, Rechtsgrundlagen, Aufbewahrungsfristen, Betroffenenrechte und Kontaktwege. Diese technische Beschreibung ist eine Formulierungshilfe und keine vollständige Datenschutzerklärung."
+msgstr ""
+
+#: includes/class-rent-terms.php:15
+msgid "Nettokaltmiete"
+msgstr ""
+
+#: includes/class-rent-terms.php:20
+msgid "Nebenkostenvorauszahlung"
+msgstr ""
+
+#: includes/class-rent-terms.php:43
+msgid "Bitte Betriebskosten und Heizkosten getrennt angeben, um die vorhandene Aufteilung zu ändern."
+msgstr ""
+
+#: includes/class-rent-terms.php:48
+msgid "Bitte Betriebskosten und Heizkosten angeben, bei Bedarf mit 0,00 Euro."
+msgstr ""
+
+#: includes/class-rent-terms.php:54
+msgid "Die Gesamtsumme der Vorauszahlung muss Betriebskosten und Heizkosten entsprechen."
+msgstr ""
+
+#: includes/class-rent-terms.php:64
+msgid "Bitte das Gültigkeitsdatum angeben."
+msgstr ""
+
+#: includes/class-rent-terms.php:67
+msgid "Die Speicherung konnte nicht gestartet werden."
+msgstr ""
+
+#: includes/class-rent-terms.php:84
+#: includes/class-rent-terms.php:93
+msgid "Die Mietbeträge konnten nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-security.php:13
+msgid "Die Sicherheitsprüfung ist derzeit nicht verfügbar."
+msgstr ""
+
+#: includes/class-security.php:19
+msgid "Zu viele Versuche. Bitte versuchen Sie es später erneut."
+msgstr ""
+
+#: includes/class-security.php:35
+msgid "Die Zwei-Faktor-Anmeldung für die Verwaltung ist derzeit nicht verfügbar."
+msgstr ""
+
+#: includes/class-settings.php:31
+msgid "Eine Einstellung ist zu lang."
+msgstr ""
+
+#: includes/class-settings.php:35
+msgid "Bitte Name, Vereinbarung und eine gültige Kontaktadresse angeben."
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "Sicherheitsstatus"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "Getrennter Datenschlüssel:"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "eingerichtet"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "noch einzurichten"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "Verschlüsselte Tabellen:"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "aktiv"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "Migration ausstehend"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "Verschlüsselte Dokumente:"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "Zwei-Faktor-Pflicht für die Verwaltung:"
+msgstr ""
+
+#: includes/class-settings.php:44
+msgid "E-Mail-Adressen in WordPress und SupportCandy sowie native Tickettexte bleiben von dieser Feldverschlüsselung ausgenommen. Daten- und Schlüsselbackups getrennt verwahren."
+msgstr ""
+
+#: includes/class-settings.php:46
+msgid "Verwaltung, Briefkopf und Vereinbarung"
+msgstr ""
+
+#: includes/class-settings.php:48
+msgid "Verwaltungsname"
+msgstr ""
+
+#: includes/class-settings.php:48
+msgid "Logo-URL"
+msgstr ""
+
+#: includes/class-settings.php:48
+msgid "Absenderanschrift"
+msgstr ""
+
+#: includes/class-settings.php:48
+msgid "Ort für Briefe"
+msgstr ""
+
+#: includes/class-settings.php:48
+msgid "Kontakt-E-Mail"
+msgstr ""
+
+#: includes/class-settings.php:48
+msgid "Website"
+msgstr ""
+
+#: includes/class-settings.php:48
+msgid "Kommunikationsvereinbarung"
+msgstr ""
+
+#: includes/class-settings.php:57
+msgid "Ein geänderter Vereinbarungstext benötigt eine neue Zustimmung. Bestehende Erklärungen behalten ihren ursprünglichen Wortlaut."
+msgstr ""
+
+#: includes/class-settings.php:57
+#: includes/view-account.php:27
+msgid "Einstellungen speichern"
+msgstr ""
+
+#: includes/class-storage.php:11
+msgid "Der geschützte Dateispeicher wurde noch nicht eingerichtet."
+msgstr ""
+
+#: includes/class-storage.php:15
+msgid "Der geschützte Dateispeicher ist nicht verfügbar."
+msgstr ""
+
+#: includes/class-storage.php:28
+msgid "Der Dateispeicher muss außerhalb des öffentlich erreichbaren Webverzeichnisses liegen."
+msgstr ""
+
+#: includes/class-storage.php:41
+msgid "Die Datei konnte nicht hochgeladen werden."
+msgstr ""
+
+#: includes/class-storage.php:46
+msgid "Die Datei ist leer oder zu groß (PDF: 15 MB, Foto: 8 MB)."
+msgstr ""
+
+#: includes/class-storage.php:53
+msgid "Bitte eine gültige PDF-Datei auswählen."
+msgstr ""
+
+#: includes/class-storage.php:62
+msgid "Bitte ein JPG- oder PNG-Foto auswählen."
+msgstr ""
+
+#: includes/class-storage.php:66
+msgid "Das Foto darf höchstens 12 Megapixel groß sein."
+msgstr ""
+
+#: includes/class-storage.php:70
+msgid "Das Foto ist nicht lesbar."
+msgstr ""
+
+#: includes/class-storage.php:82
+msgid "Das Foto konnte nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-storage.php:87
+msgid "Die Datei konnte nicht vollständig gelesen werden."
+msgstr ""
+
+#: includes/class-storage.php:96
+msgid "Die Datei konnte nicht sicher gespeichert werden."
+msgstr ""
+
+#: includes/class-storage.php:102
+msgid "Die geschützte Datei konnte nicht vollständig gespeichert werden."
+msgstr ""
+
+#: includes/class-storage.php:119
+msgid "Die Datei hat eine ungültige Größe."
+msgstr ""
+
+#: includes/class-storage.php:126
+msgid "Eine unverschlüsselte Datei wurde blockiert."
+msgstr ""
+
+#: includes/class-storage.php:134
+msgid "Das Dokument konnte nicht geprüft werden."
+msgstr ""
+
+#: includes/class-storage.php:138
+msgid "Die Integritätsprüfung dieses Dokuments ist fehlgeschlagen."
+msgstr ""
+
+#: includes/class-storage.php:150
+msgid "Das Dokument konnte nicht bereitgestellt werden."
+msgstr ""
+
+#: includes/class-storage.php:168
+msgid "Eine Bestandsdatei hat die Integritätsprüfung nicht bestanden."
+msgstr ""
+
+#: includes/class-storage.php:172
+msgid "Die Dateimigration konnte nicht verifiziert werden."
+msgstr ""
+
+#: includes/class-storage.php:179
+msgid "Die Dateimigration konnte nicht vorbereitet werden."
+msgstr ""
+
+#: includes/class-storage.php:185
+msgid "Die Dateimigration konnte nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-storage.php:199
+msgid "Die Dateimigration konnte nicht abgeschlossen werden."
+msgstr ""
+
+#: includes/class-storage.php:209
+msgid "Ungültiger Dateischlüssel."
+msgstr ""
+
+#: includes/class-storage.php:214
+msgid "Die Datei ist nicht verfügbar."
+msgstr ""
+
+#: includes/class-tickets.php:24
+msgid "Vorgänge auflisten"
+msgstr ""
+
+#: includes/class-tickets.php:27
+msgid "Neues Anliegen"
+msgstr ""
+
+#: includes/class-tickets.php:48
+msgid "Im Mieterportal liegt eine neue Information zu einem Ticket bereit."
+msgstr ""
+
+#: includes/class-tickets.php:48
+msgid "Mieterportal öffnen"
+msgstr ""
+
+#: includes/class-tickets.php:50
+msgid "Bitte antworten Sie nicht auf diese automatisch versandte E-Mail. Nutzen Sie für Ihr Anliegen das Mieterportal."
+msgstr ""
+
+#: includes/class-tickets.php:66
+msgid "Tickets"
+msgstr ""
+
+#: includes/class-tickets.php:114
+msgid "Bitte mit einem aktivierten Mieterzugang anmelden."
+msgstr ""
+
+#: includes/class-tickets.php:127
+msgid "Keine Berechtigung für dieses Ticket."
+msgstr ""
+
+#: includes/class-tickets.php:138
+msgid "Ungültiger Upload."
+msgstr ""
+
+#: includes/class-tickets.php:142
+msgid "Nur PDF, JPG oder PNG bis 8 MB."
+msgstr ""
+
+#: includes/class-tickets.php:147
+msgid "Das Foto darf höchstens 12 Megapixel haben."
+msgstr ""
+
+#: includes/class-tickets.php:182
+msgid "Ihre Anliegen"
+msgstr ""
+
+#: includes/class-tickets.php:182
+msgid "Melden Sie ein Anliegen oder antworten Sie auf einen vorhandenen Vorgang. Hier sehen Sie den Bearbeitungsstand. Bei akuten Gefahren wenden Sie sich an die zuständigen Notdienste."
+msgstr ""
+
+#: includes/class-tickets.php:187
+msgid "Tickets dieser Mietpartei"
+msgstr ""
+
+#: includes/class-tickets.php:187
+msgid "Ticketverwaltung öffnen"
+msgstr ""
+
+#: includes/class-units-admin.php:11
+#: includes/class-units-admin.php:107
+msgid "Wohnungen und Zähler"
+msgstr ""
+
+#: includes/class-units-admin.php:11
+msgid "Wohnungen"
+msgstr ""
+
+#: includes/class-units-admin.php:45
+msgid "Die Wohnungsbezeichnung ist zusammen mit der Anschrift zu lang."
+msgstr ""
+
+#: includes/class-units-admin.php:48
+msgid "Diese Wohnungsnummer ist bereits vergeben."
+msgstr ""
+
+#: includes/class-units-admin.php:56
+#: includes/class-units-admin.php:60
+msgid "Die Wohnung konnte nicht gespeichert werden."
+msgstr ""
+
+#: includes/class-units-admin.php:113
+msgid "Übernahme geprüft:"
+msgstr ""
+
+#: includes/class-units-admin.php:113
+msgid " Geräte und "
+msgstr ""
+
+#: includes/class-units-admin.php:113
+msgid "Ablesungen einschließlich Testdaten unverändert erhalten."
+msgstr ""
+
+#: includes/class-units-admin.php:123
+msgid "← Alle Wohnungen"
+msgstr ""
+
+#: includes/class-units-admin.php:124
+msgid "Wohnung bearbeiten"
+msgstr ""
+
+#: includes/class-units-admin.php:128
+msgid "Vorhandenen freien Zähler zuordnen"
+msgstr ""
+
+#: includes/class-units-admin.php:130
+msgid "Zähler zuordnen"
+msgstr ""
+
+#: includes/class-units-admin.php:137
+msgid "Wohnungen anzeigen"
+msgstr ""
+
+#: includes/class-units-admin.php:143
+msgid "Messstellen"
+msgstr ""
+
+#: includes/class-units-admin.php:143
+msgid "Geräte"
+msgstr ""
+
+#: includes/class-units-admin.php:144
+msgid "– bearbeiten"
+msgstr ""
+
+#: includes/view-account.php:8
+msgid "Bitte ergänzen Sie Ihre Bankverbindung unter"
+msgstr ""
+
+#: includes/view-account.php:8
+#: includes/view-account.php:10
+#: includes/view-portal.php:51
+#: includes/view-portal.php:123
+msgid "Mein Profil"
+msgstr ""
+
+#: includes/view-account.php:8
+msgid ". Kontoinhaber und IBAN sind Pflichtangaben beim Speichern Ihres Profils."
+msgstr ""
+
+#: includes/view-account.php:10
+msgid "Hier pflegen Sie Ihre Kontaktdaten und Bankverbindung. Die Angaben gelten für den gemeinsamen Zugang Ihrer Mietpartei. Änderungen der Anschrift und Bankverbindung werden sofort übernommen; Ihre Vertragswohnung bleibt unverändert."
+msgstr ""
+
+#: includes/view-account.php:13
+msgid "Telefonnummer"
+msgstr ""
+
+#: includes/view-account.php:14
+msgid "Bankverbindung"
+msgstr ""
+
+#: includes/view-account.php:14
+msgid "Kontoinhaber (Pflichtfeld)"
+msgstr ""
+
+#: includes/view-account.php:15
+msgid "IBAN (Pflichtfeld)"
+msgstr ""
+
+#: includes/view-account.php:16
+msgid "BIC (optional)"
+msgstr ""
+
+#: includes/view-account.php:17
+msgid "Die Angabe einer Bankverbindung erteilt kein SEPA-Lastschriftmandat."
+msgstr ""
+
+#: includes/view-account.php:17
+msgid "Aktuelles Passwort bei neuer oder geänderter Bankverbindung"
+msgstr ""
+
+#: includes/view-account.php:17
+msgid "Profilangaben speichern"
+msgstr ""
+
+#: includes/view-account.php:18
+msgid "E-Mail-Adresse"
+msgstr ""
+
+#: includes/view-account.php:18
+msgid "Bestätigte E-Mail-Adresse:"
+msgstr ""
+
+#: includes/view-account.php:20
+msgid "Bestätigung ausstehend:"
+msgstr ""
+
+#: includes/view-account.php:20
+msgid ". Bis zur Bestätigung bleibt Ihre bisherige E-Mail-Adresse aktiv. Der Link ist 24 Stunden gültig."
+msgstr ""
+
+#: includes/view-account.php:20
+msgid "E-Mail-Änderung abbrechen"
+msgstr ""
+
+#: includes/view-account.php:22
+msgid "Sie haben einen Bestätigungslink geöffnet. Bestätigen Sie jetzt die neue E-Mail-Adresse für das aktuell angemeldete Konto."
+msgstr ""
+
+#: includes/view-account.php:22
+msgid "Neue E-Mail-Adresse bestätigen"
+msgstr ""
+
+#: includes/view-account.php:22
+msgid "Verwerfen"
+msgstr ""
+
+#: includes/view-account.php:23
+msgid "E-Mail-Adresse ändern"
+msgstr ""
+
+#: includes/view-account.php:23
+msgid "Neue E-Mail-Adresse"
+msgstr ""
+
+#: includes/view-account.php:23
+msgid "Aktuelles Passwort"
+msgstr ""
+
+#: includes/view-account.php:23
+msgid "Wir senden einen Bestätigungslink an die neue Adresse. Erst nach Ihrer Bestätigung wird diese zum Anmelden und für Benachrichtigungen verwendet. Auch die bisherige Adresse erhält nach der Umstellung eine Sicherheitsmitteilung."
+msgstr ""
+
+#: includes/view-account.php:23
+msgid "Bestätigungslink anfordern"
+msgstr ""
+
+#: includes/view-account.php:25
+#: includes/view-portal.php:51
+msgid "Einstellungen"
+msgstr ""
+
+#: includes/view-account.php:25
+msgid "Wie oft möchten Sie über neue Inhalte informiert werden?"
+msgstr ""
+
+#: includes/view-account.php:25
+msgid "Sofort"
+msgstr ""
+
+#: includes/view-account.php:25
+msgid "Täglich als Sammelhinweis"
+msgstr ""
+
+#: includes/view-account.php:25
+msgid "Wöchentlich als Sammelhinweis"
+msgstr ""
+
+#: includes/view-account.php:27
+msgid "Die Auswahl gilt für neue Dokumente und Informationen zu Ihren Anliegen. Sammelhinweise werden nach etwa 24 Stunden beziehungsweise sieben Tagen versendet, sofern neue Inhalte vorliegen. Bestätigungs- und Sicherheitsmails zu Ihrem Konto werden immer sofort versendet. Die Inhalte selbst sind unabhängig von der E-Mail sofort im Portal verfügbar."
+msgstr ""
+
+#: includes/view-communication.php:6
+msgid "Bitte entscheiden Sie über die elektronische Zustellung"
+msgstr ""
+
+#: includes/view-communication.php:6
+msgid "Digitale Kommunikation"
+msgstr ""
+
+#: includes/view-communication.php:6
+msgid "Ihre Mietpartei kann ausdrücklich die ausschließlich elektronische Übermittlung der in der Vereinbarung genannten Unterlagen wählen. Die Nutzung des Portals setzt keine Zustimmung zur digitalen Zustellung voraus."
+msgstr ""
+
+#: includes/view-communication.php:7
+msgid "Aktuelle Wahl:"
+msgstr ""
+
+#: includes/view-communication.php:7
+msgid "Elektronische Zustellung vereinbart"
+msgstr ""
+
+#: includes/view-communication.php:7
+msgid "Keine aktive Vereinbarung zur digitalen Zustellung"
+msgstr ""
+
+#: includes/view-communication.php:11
+msgid "Vereinbarung lesen"
+msgstr ""
+
+#: includes/view-communication.php:11
+msgid "Textfassung"
+msgstr ""
+
+#: includes/view-communication.php:12
+msgid "Ich stimme der Vereinbarung ausdrücklich zu: Für die erfassten Unterlagen genügt die elektronische Übermittlung; zusätzliche Papierbriefe entfallen."
+msgstr ""
+
+#: includes/view-communication.php:12
+msgid "Ich bin berechtigt, diese Wahl für die Mietpartei zu erklären, und habe sie mit den weiteren Vertragspartnern abgestimmt."
+msgstr ""
+
+#: includes/view-communication.php:12
+msgid "Wahl dokumentieren"
+msgstr ""
+
+#: includes/view-communication.php:14
+msgid "Die Vereinbarung zur digitalen Zustellung wird noch vorbereitet. Bis zur Freigabe gelten Ihre bisherigen Kommunikationswege weiter."
+msgstr ""
+
+#: includes/view-communication.php:17
+msgid "Digitale Zustellung für die Zukunft widerrufen"
+msgstr ""
+
+#: includes/view-communication.php:19
+msgid "Die Erklärung gilt für den gemeinsamen Zugang Ihrer Mietpartei. Sie ersetzt keine gesetzlich vorgeschriebene Form und bestätigt nicht automatisch den Zugang einzelner Schreiben."
+msgstr ""
+
+#: includes/view-meter-points-admin.php:9
+msgid "Messstellen und Zählergeräte"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:9
+msgid "Die Messstelle bleibt an der Wohnung. Jedes eingesetzte Gerät besitzt eine eigene Nummer und Gültigkeit. Ein Wechsel erhält beide Geräte und ihre Ablesungen."
+msgstr ""
+
+#: includes/view-meter-points-admin.php:11
+msgid "Noch keine Messstellen vorhanden."
+msgstr ""
+
+#: includes/view-meter-points-admin.php:15
+msgid " Gerät(e)"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:17
+#: includes/view-meter-points-admin.php:47
+msgid "Bezeichnung der Messstelle"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:17
+#: includes/view-meter-points-admin.php:47
+msgid "Einheit"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:19
+msgid "Messstelle speichern"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:20
+msgid "Gerätehistorie"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:21
+msgid "Noch kein Gerät an dieser Messstelle."
+msgstr ""
+
+#: includes/view-meter-points-admin.php:23
+#: includes/view-meter-points-admin.php:33
+#: includes/view-meter-points-admin.php:44
+msgid "Zählernummer"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:23
+#: includes/view-meter-points-admin.php:34
+#: includes/view-meter-points-admin.php:44
+#: includes/view-rent-admin.php:21
+#: includes/view-rent-admin.php:37
+msgid "Gültig ab"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:23
+#: includes/view-meter-points-admin.php:34
+#: includes/view-meter-points-admin.php:44
+msgid "Gültig bis"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:23
+msgid "Letzter Stand"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:26
+msgid "Inaktiv"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:26
+msgid "Geplant"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:26
+msgid "Ausgebaut"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:26
+msgid "Endet am "
+msgstr ""
+
+#: includes/view-meter-points-admin.php:26
+msgid "Im Einsatz"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:27
+msgid "Noch unbekannt"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:27
+msgid "Noch keine Ablesung"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:31
+msgid "Gerät "
+msgstr ""
+
+#: includes/view-meter-points-admin.php:33
+msgid "Messstelle:"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:34
+msgid "Gerät freigegeben"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:34
+msgid "Gerät speichern"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:37
+msgid "Zählerwechsel erfassen"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:37
+msgid "Der Wechsel schließt das bisherige Gerät ab und legt ein neues Gerät an derselben Messstelle an. Am Wechseltag können End- und Anfangsstand zu den jeweiligen Geräten gespeichert werden."
+msgstr ""
+
+#: includes/view-meter-points-admin.php:39
+msgid "Bisheriges Gerät"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:41
+msgid "Wechseldatum"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:41
+msgid "Neue Zählernummer"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:42
+msgid "Endstand bisheriges Gerät (optional)"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:42
+msgid "Anfangsstand neues Gerät (optional)"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:42
+msgid "Tatsächlich abgelesener Stand"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:42
+msgid "Ohne eingetragenen Wechselstand wird kein Zählerstand angenommen. Eine eindeutige Mietpartei zum Wechseltag erhält die zugehörige Ablesung; bei Leerstand bleibt sie nur in der Verwaltung."
+msgstr ""
+
+#: includes/view-meter-points-admin.php:42
+msgid "Zählerwechsel speichern"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:44
+msgid "Weiteres historisches oder geplantes Gerät hinzufügen"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:44
+msgid "Erstes Gerät hinzufügen"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:44
+msgid "Gerät hinzufügen"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:47
+msgid "Neue Messstelle anlegen"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:47
+msgid "z. B. Kaltwasser Küche"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:47
+msgid "m³"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:47
+msgid "kWh"
+msgstr ""
+
+#: includes/view-meter-points-admin.php:47
+msgid "Messstelle anlegen"
+msgstr ""
+
+#: includes/view-portal.php:8
+msgid "Ihr Mieterportal"
+msgstr ""
+
+#: includes/view-portal.php:8
+msgid "Ein gemeinsamer Zugang. Alles rund um Ihr Mietverhältnis."
+msgstr ""
+
+#: includes/view-portal.php:13
+msgid "Willkommen zurück"
+msgstr ""
+
+#: includes/view-portal.php:13
+msgid "Melden Sie sich mit dem gemeinsamen Zugang Ihrer Mietpartei an."
+msgstr ""
+
+#: includes/view-portal.php:14
+msgid "E-Mail-Adresse oder Benutzername"
+msgstr ""
+
+#: includes/view-portal.php:14
+msgid "Angemeldet bleiben"
+msgstr ""
+
+#: includes/view-portal.php:15
+msgid "Passwort vergessen?"
+msgstr ""
+
+#: includes/view-portal.php:18
+#: includes/view-portal.php:28
+msgid "Einladung erhalten?"
+msgstr ""
+
+#: includes/view-portal.php:18
+msgid "Scannen Sie den QR-Code auf Ihrem Brief oder geben Sie den Einladungscode ein. Pro Mietpartei wird genau ein Zugang eingerichtet."
+msgstr ""
+
+#: includes/view-portal.php:20
+msgid "Einladungscode"
+msgstr ""
+
+#: includes/view-portal.php:21
+msgid "Gemeinsame Kontakt-E-Mail-Adresse"
+msgstr ""
+
+#: includes/view-portal.php:22
+msgid "An diese Adresse senden wir einen Link zur Bestätigung und zum Festlegen Ihres Passworts. Ihre Entscheidung zur digitalen Kommunikation treffen Sie anschließend separat im Portal."
+msgstr ""
+
+#: includes/view-portal.php:23
+msgid "Informationen zur Datenverarbeitung finden Sie in der"
+msgstr ""
+
+#: includes/view-portal.php:23
+msgid "Datenschutzerklärung"
+msgstr ""
+
+#: includes/view-portal.php:23
+msgid "Informationen zur Datenverarbeitung erhalten Sie von Ihrer Verwaltung."
+msgstr ""
+
+#: includes/view-portal.php:24
+msgid "Aktivierungslink anfordern"
+msgstr ""
+
+#: includes/view-portal.php:28
+msgid "Aktivieren Sie den gemeinsamen Zugang mit dem Code aus Ihrem Einladungsbrief."
+msgstr ""
+
+#: includes/view-portal.php:28
+msgid "Zugang aktivieren"
+msgstr ""
+
+#: includes/view-portal.php:32
+msgid "Zugang nicht verfügbar"
+msgstr ""
+
+#: includes/view-portal.php:33
+msgid "Für dieses Konto ist der Mieterzugang noch nicht aktiviert, gesperrt oder die Zugangsfrist ist abgelaufen. Bitte verwenden Sie den Bestätigungslink aus Ihrer E-Mail oder wenden Sie sich an die Verwaltung."
+msgstr ""
+
+#: includes/view-portal.php:35
+msgid "Portal verwalten"
+msgstr ""
+
+#: includes/view-portal.php:37
+#: includes/view-portal.php:51
+msgid "Abmelden"
+msgstr ""
+
+#: includes/view-portal.php:51
+msgid "Benutzerkonto"
+msgstr ""
+
+#: includes/view-portal.php:53
+msgid "Ihre Angaben wurden gespeichert. Vielen Dank."
+msgstr ""
+
+#: includes/view-portal.php:55
+#: includes/view-portal.php:119
+msgid "Vertragsübersicht"
+msgstr ""
+
+#: includes/view-portal.php:55
+msgid "Dokumente"
+msgstr ""
+
+#: includes/view-portal.php:55
+#: includes/view-portal.php:123
+msgid "Nachrichten"
+msgstr ""
+
+#: includes/view-portal.php:55
+#: includes/view-portal.php:96
+msgid "Zählerstände"
+msgstr ""
+
+#: includes/view-portal.php:55
+msgid "Kommunikation"
+msgstr ""
+
+#: includes/view-portal.php:56
+msgid "Ihre Dokumente"
+msgstr ""
+
+#: includes/view-portal.php:56
+msgid "Der erste vollständige Abruf wird mit Zeitpunkt und Benutzerkonto gespeichert. Verträge, Abrechnungen und weitere Unterlagen für Ihre Mietpartei. Sie können die Dateien herunterladen und dauerhaft speichern."
+msgstr ""
+
+#: includes/view-portal.php:58
+msgid "Für Ihre Mietpartei wurden noch keine Dokumente bereitgestellt."
+msgstr ""
+
+#: includes/view-portal.php:60
+#: includes/view-portal.php:63
+msgid "Dokumententyp"
+msgstr ""
+
+#: includes/view-portal.php:60
+msgid "Alle Dokumententypen"
+msgstr ""
+
+#: includes/view-portal.php:62
+msgid "Dokumente durchsuchen"
+msgstr ""
+
+#: includes/view-portal.php:62
+msgid "Titel oder Dateiname"
+msgstr ""
+
+#: includes/view-portal.php:63
+msgid "Bereitgestellt"
+msgstr ""
+
+#: includes/view-portal.php:63
+msgid "Abgerufen"
+msgstr ""
+
+#: includes/view-portal.php:63
+msgid "Datei"
+msgstr ""
+
+#: includes/view-portal.php:64
+msgid "Noch nicht abgerufen"
+msgstr ""
+
+#: includes/view-portal.php:64
+msgid "PDF herunterladen"
+msgstr ""
+
+#: includes/view-portal.php:73
+msgid "Nachrichten und Anliegen"
+msgstr ""
+
+#: includes/view-portal.php:73
+msgid "Für Ihre Fragen und Meldungen an die Verwaltung. Für akute Gefahren nutzen Sie bitte die zuständigen Notdienste. Das Portal ist kein Notrufdienst."
+msgstr ""
+
+#: includes/view-portal.php:74
+msgid "Neue Nachricht schreiben"
+msgstr ""
+
+#: includes/view-portal.php:76
+msgid "Worum geht es?"
+msgstr ""
+
+#: includes/view-portal.php:76
+msgid "Allgemeines Anliegen"
+msgstr ""
+
+#: includes/view-portal.php:76
+msgid "Schaden oder Mangel melden"
+msgstr ""
+
+#: includes/view-portal.php:76
+msgid "Stammdatenänderung mitteilen"
+msgstr ""
+
+#: includes/view-portal.php:77
+msgid "Betreff"
+msgstr ""
+
+#: includes/view-portal.php:78
+msgid "Ihre Nachricht"
+msgstr ""
+
+#: includes/view-portal.php:79
+msgid "Nachricht senden"
+msgstr ""
+
+#: includes/view-portal.php:83
+msgid "Hier finden Sie künftig Ihre Nachrichten und die Antworten der Verwaltung."
+msgstr ""
+
+#: includes/view-portal.php:89
+msgid "Ihre Mietpartei"
+msgstr ""
+
+#: includes/view-portal.php:96
+msgid "Bitte melden Sie nur die Werte der angezeigten Geräte. Geben Sie das tatsächliche Ablesedatum an. Meldungen werden vor einer Übernahme in die Abrechnung geprüft."
+msgstr ""
+
+#: includes/view-portal.php:102
+msgid "Abgelesener Zählerstand"
+msgstr ""
+
+#: includes/view-portal.php:102
+msgid "z. B. 123,456"
+msgstr ""
+
+#: includes/view-portal.php:102
+msgid "Höchstens drei Nachkommastellen. Einheit siehe Zählerauswahl."
+msgstr ""
+
+#: includes/view-portal.php:102
+msgid "Tatsächliches Ablesedatum"
+msgstr ""
+
+#: includes/view-portal.php:103
+msgid "Zählerfoto (optional)"
+msgstr ""
+
+#: includes/view-portal.php:103
+msgid "JPG oder PNG, maximal 8 MB und 12 Megapixel. Bitte Gerätenummer und Anzeige lesbar fotografieren."
+msgstr ""
+
+#: includes/view-portal.php:104
+msgid "Zählerstand melden"
+msgstr ""
+
+#: includes/view-portal.php:107
+msgid "Es wurden noch keine Zähler für Ihre Mietpartei zugeordnet. Bitte wenden Sie sich an die Verwaltung."
+msgstr ""
+
+#: includes/view-portal.php:110
+msgid "Ihre letzten Meldungen"
+msgstr ""
+
+#: includes/view-portal.php:110
+msgid "Gerät"
+msgstr ""
+
+#: includes/view-portal.php:110
+msgid "Abgelesen am"
+msgstr ""
+
+#: includes/view-portal.php:110
+msgid "Stand"
+msgstr ""
+
+#: includes/view-portal.php:110
+msgid "Bearbeitung"
+msgstr ""
+
+#: includes/view-portal.php:110
+msgid "Foto"
+msgstr ""
+
+#: includes/view-portal.php:111
+msgid "Eingegangen, noch ungeprüft"
+msgstr ""
+
+#: includes/view-portal.php:111
+msgid "Von Verwaltung bestätigt"
+msgstr ""
+
+#: includes/view-portal.php:112
+msgid "Foto herunterladen"
+msgstr ""
+
+#: includes/view-portal.php:119
+msgid "Wohnung / Vertrag"
+msgstr ""
+
+#: includes/view-portal.php:119
+msgid "Vertrags-/Mietparteiennummer"
+msgstr ""
+
+#: includes/view-portal.php:119
+msgid "Mietverhältnis"
+msgstr ""
+
+#: includes/view-portal.php:119
+msgid "Beendet"
+msgstr ""
+
+#: includes/view-portal.php:119
+msgid "Beginnt zukünftig"
+msgstr ""
+
+#: includes/view-portal.php:119
+msgid "Laufend"
+msgstr ""
+
+#: includes/view-portal.php:120
+msgid "Kündigung / Vereinbarung erfasst"
+msgstr ""
+
+#: includes/view-portal.php:122
+msgid "Portalzugang längstens bis"
+msgstr ""
+
+#: includes/view-portal.php:122
+msgid "einschließlich"
+msgstr ""
+
+#: includes/view-portal.php:123
+msgid "Ihre Anschrift, Bankverbindung und Kontaktdaten können Sie unter"
+msgstr ""
+
+#: includes/view-portal.php:123
+msgid "pflegen. Bei Fragen zu Ihren Vertragsdaten schreiben Sie uns über"
+msgstr ""
+
+#: includes/view-portal.php:129
+msgid "Fragen zum Zugang?"
+msgstr ""
+
+#: includes/view-portal.php:129
+msgid "Kontakt zur Verwaltung"
+msgstr ""
+
+#: includes/view-rent-admin.php:7
+msgid "Vertragliche Mietbeträge"
+msgstr ""
+
+#: includes/view-rent-admin.php:10
+msgid "Aktuell seit"
+msgstr ""
+
+#: includes/view-rent-admin.php:15
+#: includes/view-rent-tenant.php:11
+msgid "Monatlicher Gesamtbetrag"
+msgstr ""
+
+#: includes/view-rent-admin.php:22
+msgid "Monatliche Nettokaltmiete (€)"
+msgstr ""
+
+#: includes/view-rent-admin.php:26
+msgid "\" name=\""
+msgstr ""
+
+#: includes/view-rent-admin.php:29
+msgid "Nebenkostenvorauszahlung gesamt (€)"
+msgstr ""
+
+#: includes/view-rent-admin.php:31
+msgid "Bei einer Aufteilung bitte Betriebs- und Heizkosten angeben, bei Bedarf jeweils 0,00. Eine leere Garagenmiete behält den bisherigen Betrag bei. Zum Entfernen 0,00 eintragen."
+msgstr ""
+
+#: includes/view-rent-admin.php:32
+msgid "Mietbeträge speichern"
+msgstr ""
+
+#: includes/view-rent-admin.php:35
+msgid "Bisherige und geplante Beträge"
+msgstr ""
+
+#: includes/view-rent-admin.php:37
+msgid "Monatliche Mietbestandteile"
+msgstr ""
+
+#: includes/view-rent-admin.php:37
+msgid "Gesamt"
+msgstr ""
+
+#: includes/view-rent-admin.php:41
+msgid " (zukünftig)"
+msgstr ""
+
+#: includes/view-rent-tenant.php:8
+msgid "monatlich"
+msgstr ""
+
+#: includes/view-rent-tenant.php:10
+msgid "Gültig seit"
+msgstr ""
+
+#: includes/view-rent-tenant.php:13
+msgid "Mietbeträge"
+msgstr ""
+
+#: includes/view-rent-tenant.php:13
+msgid "Noch kein aktuell gültiger Stand hinterlegt"
+msgstr ""
+
+#: includes/view-rent-tenant.php:16
+msgid "Geplante Beträge ab"
+msgstr ""

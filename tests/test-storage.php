@@ -1,4 +1,6 @@
 <?php
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit; }
+require_once __DIR__ . '/bootstrap-standalone.php';
 $base = sys_get_temp_dir() . '/bpm-storage-test-' . bin2hex(random_bytes(6));
 mkdir($base, 0700);
 mkdir($base . '/public', 0700);

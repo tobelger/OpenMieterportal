@@ -1,9 +1,16 @@
 # Änderungen
 
+## 0.10.0
+
+- Installationspaket unter `openmieterportal`, passende Textdomain, Übersetzungsfunktionen und POT-Katalog; technische Tabellen und Alt-Shortcodes bleiben kompatibel.
+- Englische Verzeichnis-Readme, technische Datenschutzhilfe im WordPress-Assistenten und dokumentierte Einrichtungs-/Verschlüsselungsgrenzen.
+- SQL-Bezeichner und dynamische Filterwerte mit WordPress-Platzhaltern binden; Nonces zusätzlich an schreibenden Einstiegspunkten prüfen.
+- Styles und Skripte des Einladungsbriefs über WordPress registrieren; Entwicklungstests aus dem Installationspaket ausschließen.
+- Offiziellen Plugin Check, frische Installation, Nonce-/Ausgabegrenzen und bestehende Fachtests prüfen.
+
 ## 0.9.1
 
-- Gebäude- und Wohnungsnamen werden auch bei Abfragen mit vorangestellten Zähl-Unterabfragen korrekt entschlüsselt.
-- Regressionstest der verschlüsselten Wohnungsliste ergänzt.
+- Verschlüsselte Gebäude- und Wohnungsnamen in der Wohnungsliste mit Zähl-Unterabfragen korrigieren.
 
 ## 0.9.0
 

@@ -1,7 +1,9 @@
 <?php
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit; }
 // Isolated regression test. No WordPress database, SMTP connection or real users.
 // Pass SupportCandy's official includes/class-wpsc-email-notifications.php as argv[1].
 define('ABSPATH', __DIR__);
+require_once __DIR__ . '/bootstrap-standalone.php';
 $filters=[];$households=[];$frequencies=[];$notices=[];
 function add_action(...$args) {}
 function add_shortcode(...$args) {}

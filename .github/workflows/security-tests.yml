@@ -38,8 +38,8 @@ jobs:
           php /tmp/wp-cli.phar config set DISABLE_WP_CRON true --raw --path=/tmp/omp-wp
           php /tmp/wp-cli.phar core install --path=/tmp/omp-wp --url=http://127.0.0.1:8974 --title='Disposable portal test' --admin_user=fixtureadmin --admin_password="$(openssl rand -hex 24)" --admin_email=fixture@example.test --skip-email
           php /tmp/wp-cli.phar plugin install supportcandy --activate --path=/tmp/omp-wp
-          ln -s "$GITHUB_WORKSPACE" /tmp/omp-wp/wp-content/plugins/belger-mieterportal
-          php /tmp/wp-cli.phar plugin activate belger-mieterportal --path=/tmp/omp-wp
+          ln -s "$GITHUB_WORKSPACE" /tmp/omp-wp/wp-content/plugins/openmieterportal
+          php /tmp/wp-cli.phar plugin activate openmieterportal --path=/tmp/omp-wp
       - name: Account, encryption and notification checks
         env:
           BPM_TEST_WP_LOAD: /tmp/omp-wp/wp-load.php
@@ -47,4 +47,21 @@ jobs:
           set -eu
           php tests/test-account.php
           php tests/test-encryption.php
+          php tests/test-submission.php
+          php tests/test-consent-display.php
+          php tests/test-meter-points.php
+          php tests/test-pagination.php
+          php tests/test-unit-migration.php
+          php tests/test-units-admin.php
+          php tests/test-wiso-rent.php
           php tests/test-ticket-notifications.php /tmp/omp-wp/wp-content/plugins/supportcandy/includes/class-wpsc-email-notifications.php
+      - name: WordPress.org package check
+        run: |
+          set -eu
+          php /tmp/wp-cli.phar plugin install plugin-check --version=2.2.0 --activate --path=/tmp/omp-wp
+          python3 tools/build-package.py /tmp/openmieterportal.zip
+          mkdir -p /tmp/omp-package
+          python3 -c "import zipfile; zipfile.ZipFile('/tmp/openmieterportal.zip').extractall('/tmp/omp-package')"
+          cp -R /tmp/omp-package/openmieterportal /tmp/omp-wp/wp-content/plugins/pcp-package
+          php /tmp/wp-cli.phar plugin check pcp-package --slug=openmieterportal --format=json --path=/tmp/omp-wp --require=/tmp/omp-wp/wp-content/plugins/plugin-check/cli.php > /tmp/pcp-results.raw
+          python3 tools/check-plugin-check.py /tmp/pcp-results.raw --baseline=tools/plugin-check-baseline.json

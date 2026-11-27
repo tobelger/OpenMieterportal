@@ -1,4 +1,5 @@
 <?php
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit; }
 require getenv('BPM_TEST_WP_LOAD') ?: '/tmp/belger-portal-runtime/wordpress/wp-load.php';
 if(!str_starts_with(home_url(),'http://127.0.0.1:'))throw new RuntimeException('Local fixture required');
 global $wpdb;$checks=0;$mails=[];$mail_ok=true;

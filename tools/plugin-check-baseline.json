@@ -1,0 +1,21 @@
+{
+  "checker": "WordPress Plugin Check 2.2.0",
+  "reviewed_warning_limits": {
+    "PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound": {
+      "maximum": 1,
+      "reason": "Runs on init to also support private/legacy installations and bundled translations, not only WordPress.org language packs."
+    },
+    "WordPress.DB.DirectDatabaseQuery.DirectQuery": {
+      "maximum": 57,
+      "reason": "The plugin owns relational tables, atomic rate counters and transaction locks that have no equivalent high-level WordPress API."
+    },
+    "WordPress.DB.DirectDatabaseQuery.NoCaching": {
+      "maximum": 51,
+      "reason": "Authorization, locks and encrypted field hydration use fresh reads; persistent caching of decrypted tenant data is intentionally avoided."
+    },
+    "WordPress.Security.NonceVerification.Recommended": {
+      "maximum": 20,
+      "reason": "Read-only, sanitized GET filters/navigation and preflight routing; write handlers separately verify their operation-specific nonce."
+    }
+  }
+}

@@ -3,7 +3,7 @@ Contributors: tobelger
 Requires at least: 6.6
 Requires PHP: 8.1
 Requires Plugins: supportcandy
-Stable tag: 0.9.0
+Stable tag: 0.9.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ Kontobestätigungen und Sicherheitsmails werden unabhängig vom gewählten Rhyth
 Eine Bankangabe ist kein SEPA-Lastschriftmandat. Kommunikationsvereinbarungen, Aufbewahrungsfristen und Formvorgaben sind für den jeweiligen Einsatz zu prüfen.
 
 == Changelog ==
+
+= 0.9.1 =
+* Gebäude- und Wohnungsnamen in der verschlüsselten Wohnungstabelle mit Zähl-Unterabfragen korrigieren.
 
 = 0.9.0 =
 * Separate Datenschlüssel, kontextgebundene Feld- und Dateiverschlüsselung, explizite CLI-Migration und Schlüsselwechsel.

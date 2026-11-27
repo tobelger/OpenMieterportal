@@ -13,7 +13,7 @@ final class BPM_Data {
     private static function name(string $table): string { global $wpdb;return str_starts_with($table,$wpdb->prefix.'bpm_')?substr($table,strlen($wpdb->prefix.'bpm_')):''; }
     private static function primary(string $sql): string { global $wpdb;preg_match('/\bFROM\s+`?('.preg_quote($wpdb->prefix.'bpm_','/').'[a-z_]+)`?/i',$sql,$m);return isset($m[1])?$m[1]:''; }
     public static function row($sql,$output=OBJECT,$y=0) {global $wpdb;$row=$wpdb->get_row($sql,$output,$y);if(is_object($row))return self::hydrate(self::primary($sql),$row);if(is_array($row)&&$output===ARRAY_A)return (array)self::hydrate(self::primary($sql),(object)$row);return $row;}
-    public static function rows($sql,$output=OBJECT): array {global $wpdb;$rows=$wpdb->get_results($sql,$output);if(!is_array($rows))return [];foreach($rows as &$row){if(is_object($row))$row=self::hydrate(self::primary($sql),$row);elseif(is_array($row)&&$output===ARRAY_A)$row=(array)self::hydrate(self::primary($sql),(object)$row);}return $rows;}
+    public static function rows($sql,$output=OBJECT,?string $table=null): array {global $wpdb;$rows=$wpdb->get_results($sql,$output);if(!is_array($rows))return [];foreach($rows as &$row){if(is_object($row))$row=self::hydrate($table??self::primary($sql),$row);elseif(is_array($row)&&$output===ARRAY_A)$row=(array)self::hydrate($table??self::primary($sql),(object)$row);}return $rows;}
     public static function hydrate(string $table,object $row): object {
         global $wpdb;$name=self::name($table);
         if(!isset(self::FIELDS[$name])||empty($row->id))return $row;

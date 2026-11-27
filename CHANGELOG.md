@@ -1,5 +1,10 @@
 # Änderungen
 
+## 0.9.1
+
+- Gebäude- und Wohnungsnamen werden auch bei Abfragen mit vorangestellten Zähl-Unterabfragen korrekt entschlüsselt.
+- Regressionstest der verschlüsselten Wohnungsliste ergänzt.
+
 ## 0.9.0
 
 - Optionaler separater Schlüsselring für AES-256-GCM; eigene sensible Tabellenfelder, Kontoprofile und Portaldateien werden kontextgebunden verschlüsselt.
